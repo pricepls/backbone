@@ -1,0 +1,29 @@
+{
+
+  "development":{
+
+    "mysql":{
+
+      "host":"localhost",
+      "user":"root",
+      "password":"root"
+
+    },
+
+    "port":"3000"
+
+  },
+  "production":{
+
+    "mysql":{
+
+      "host":"localhost",
+      "user":"root",
+      "password":"root"
+
+    },
+    "port":"3000"
+
+  }
+
+}

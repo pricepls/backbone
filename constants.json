@@ -1,0 +1,13 @@
+{
+
+  "messages":{
+
+    "1001":"Oho ! that was a close miss",
+    "1002":"Sorry I think you are not with us",
+    "2001":"Vendor doesn't exists",
+    "2002":"Phone number already exists",
+    "3001":"Please mention all the details"
+
+  }
+
+}
