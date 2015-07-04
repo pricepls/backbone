@@ -41,13 +41,7 @@ var port=configs.port;
 
 // router files
 
-var admin=require('./routes/admin');
-var vendor=require('./routes/vendor');
-
-app.use('/admin',admin);
-app.use('/vendor',vendor);
-
-
+var router=require('./routes');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
