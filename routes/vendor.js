@@ -189,6 +189,116 @@ var vendor={
                 }
             });
         });
+    },
+    getNewrequests:function(req,res,next){
+
+        var response={
+            status:"",
+            error_code:"",
+            error_msg:""
+        }
+
+        var vendor_id=req.query.vendor || undefined;
+        if(vendor_id !== undefined){
+
+            var query={
+
+                /* query using element match */
+                "notified_vendors":{
+                    $elemMatch:{ vendor_id : parseInt(vendor_id) }
+                }
+
+                /* query using dot operator need to validate the performance of both  */
+
+                //"notified_vendors.vendor_id":parseInt(vendor_id)
+            }
+            mongo.getNewrequests(query,function(err,requests){
+
+                if(err)
+                    next(err);
+                else{
+                    response.statusCode=200;
+                    response.status="success";
+                    response.data=requests;
+                    res.json(response);
+                }
+            });
+        }else{
+
+            response.statusCode=200;
+            response.status="error";
+            response.error_code="2003",
+            response.error_msg= constants.messages['2003']
+            res.json(response);
+        }
+    },
+
+    repliedRequests:function(req,res) {
+
+        var response = {
+            status: "",
+            error_code: "",
+            error_msg: ""
+        }
+
+        var vendor_id = req.query.vendor || undefined;
+        if (vendor_id !== undefined) {
+
+            var query={
+                "notified_vendors":{
+                    $elemMatch:{
+                        vendor_id : parseInt(vendor_id),
+                        pp_price : { $exists : true }  }
+                }
+            }
+
+            mongo.getRepliedRequests(query,function(err,requests){
+
+                if(err)
+                    next(err);
+                else{
+                    response.statusCode=200;
+                    response.status="success";
+                    response.data=requests;
+                    res.json(response);
+                }
+            });
+        }else{
+
+            response.statusCode=200;
+            response.status="error";
+            response.error_code="2003",
+            response.error_msg= constants.messages['2003']
+            res.json(response);
+        }
+    },
+    confirmedBookings:function(req,res,next){
+
+        var response = {
+            status: "",
+            error_code: "",
+            error_msg: ""
+        }
+
+        var vendor_id = req.query.vendor || undefined;
+        if (vendor_id !== undefined) {
+
+            mongo.confirmedBookings(query,function(err,bookings){
+
+
+
+            });
+
+        }else{
+
+            response.statusCode=200;
+            response.status="error";
+            response.error_code="2003",
+            response.error_msg= constants.messages['2003']
+            res.json(response);
+
+        }
+
     }
 
 }

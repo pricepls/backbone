@@ -18,7 +18,9 @@
     "mysql":"2.7.0",
     "MD5":"1.2.2",
     "chance":"0.7.6",
-    "mongoskin":"1.4.13"
+    "mongoskin":"1.4.13",
+    "shortid":"2.2.2"
+
   },
   "private":true
 }
