@@ -3,7 +3,7 @@ var Chance=require('chance');
 var chance = new Chance();
 var md5=require('MD5');
 var async=require('async');
-
+var shortId=require('shortid');
 var constants=app.get('constants');
 var mysqlDB=require('../lib/mysqldb')();
 var mongo=require('../lib/mongodb');
@@ -122,18 +122,29 @@ var vendor={
     },
     createListing:function(req,res,next){
 
+        var response={
+            status:"",
+            error_code:"",
+            error_msg:""
+        }
+
         var area=req.body.area;
         var city=req.body.city;
+        var city_id=parseInt(req.body.city_id);
         var state=req.body.state;
         var country=req.body.country;
-        var lat=req.body.lat;
-        var long=req.body.long;
-        var amenities=req.body.amentities;
-        var vendor_id=req.body.vendor;
+        var lat=req.body.lat.toString();
+        var long=req.body.long.toString();
+        var amenities=[];
+        amenities=req.body.amenities;
+        var vendor_id=parseInt(req.body.vendor);
         var category=req.body.category;
+        var category_id = parseInt(req.body.category_id);
+        var sub_category=req.body.subcategory;
         var star_rating=req.body.star_rating;
-        var vendor_obj=[];
-        var room_types=req.body.roomtypes || [];
+        var vendor_obj={};
+        var room_types=[];
+        room_types=req.body.roomtypes;
 
         async.series([
             function(callback){
@@ -144,9 +155,9 @@ var vendor={
                         next();
                     }else{
                         if(vendor !== undefined){
-                            vendor_obj.name=vendor.name;
-                            vendor_obj.phone=vendor.phone;
-                            vendor_obj.contact_no=vendor.contact_no;
+                           vendor_obj.name=vendor.name;
+                           vendor_obj.phone=vendor.phone.toString();
+                           vendor_obj.contact_no=vendor.contact_no.toString();
                         }
                         callback();
                     }
@@ -160,9 +171,13 @@ var vendor={
             if(err)
                 next(err);
 
-            var listData={
 
+            var current_time=new Date().getTime().toString();
+
+            var listData={
+                "listing_id":"PPL_"+shortId.generate(),
                 "area":area,
+                "city_id":city_id,
                 "city":city,
                 "state":state,
                 "country":country,
@@ -171,12 +186,15 @@ var vendor={
                 "amenities":amenities,
                 "vendor_id":vendor_id,
                 "vendor_details":vendor_obj,
+                "category_id":category_id,
                 "category":category,
+                "sub_category":sub_category,
                 "star_rating":star_rating,
-                "created_at": new Date().getTime(),
+                "created_at": current_time,
+                "modified_at": current_time,
                 "images":[],
                 "room_types":room_types,
-                "status":true
+                "status":"active"
             }
             mongo.createListing(listData,function(err,success){
 
@@ -184,8 +202,10 @@ var vendor={
                     next(err);
                 else{
 
-                    res.statusCode=200;
-                    res.message="success";
+                    response.statusCode=200;
+                    response.message="success";
+                    res.json(response);
+
                 }
             });
         });
