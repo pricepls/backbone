@@ -225,7 +225,12 @@ var vendor={
 
                 /* query using element match */
                 "notified_vendors":{
-                    $elemMatch:{ vendor_id : parseInt(vendor_id) }
+                    $elemMatch:{
+
+                        vendor_id : parseInt(vendor_id),
+                        pp_price : { $exists : false }
+
+                    }
                 }
 
                 /* query using dot operator need to validate the performance of both  */
