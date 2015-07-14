@@ -10,7 +10,7 @@ router.post('/admin/new',admin.createAdmin);
 
 /* all vendor related routes */
 
-router.get('/vendor/login',vendor.login);
+router.post('/vendor/login',vendor.login);
 router.post('/vendor/new',vendor.createVendor);
 router.post('/vendor/listing/new',vendor.createListing);
 router.get('/vendor/new-requests',vendor.getNewrequests);
