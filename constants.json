@@ -7,7 +7,8 @@
     "2001":"Vendor doesn't exists",
     "2002":"Phone number already exists",
     "2003":"Please mention vendor id",
-    "3001":"Please mention all the details"
+    "3001":"Please mention all the details",
+    "2004":"Please mention all fields"
 
 
   }

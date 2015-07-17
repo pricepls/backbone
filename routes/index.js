@@ -13,6 +13,7 @@ router.post('/admin/new',admin.createAdmin);
 router.post('/vendor/login',vendor.login);
 router.post('/vendor/new',vendor.createVendor);
 router.post('/vendor/listing/new',vendor.createListing);
+router.post('/vendor/new-price',vendor.newPrice);
 router.get('/vendor/new-requests',vendor.getNewrequests);
 router.get('/vendor/replied-requests',vendor.repliedRequests);
 router.get('/vendor/confimed-bookings',vendor.confirmedBookings);

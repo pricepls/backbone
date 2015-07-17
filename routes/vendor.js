@@ -244,7 +244,7 @@ var vendor={
                 else{
                     response.statusCode=200;
                     response.status="success";
-                    response.data=requests;
+                    response.data=requests || {};
                     res.json(response);
                 }
             });
@@ -284,7 +284,7 @@ var vendor={
                 else{
                     response.statusCode=200;
                     response.status="success";
-                    response.data=requests;
+                    response.data=requests || {};
                     res.json(response);
                 }
             });
@@ -308,9 +308,21 @@ var vendor={
         var vendor_id = req.query.vendor || undefined;
         if (vendor_id !== undefined) {
 
+            var query={
+
+                "accepted_vendor.id":parseInt(vendor_id)
+            }
+
             mongo.confirmedBookings(query,function(err,bookings){
 
-
+                if(err)
+                    next(err);
+                else{
+                    response.statusCode=200;
+                    response.status="success";
+                    response.data=bookings || {};
+                    res.json(response);
+                }
 
             });
 
@@ -324,6 +336,47 @@ var vendor={
 
         }
 
+    },
+    newPrice : function(req,res,next){
+
+        var response = {
+            status: "",
+            error_code: "",
+            error_msg: ""
+        }
+        var vendor_id = req.body.vendor || undefined;
+        var request_id = req.body.request || undefined;
+        var price = req.body.price || undefined;
+        if(vendor_id === undefined && request_id !== undefined && price !== undefined){
+
+            response.statusCode=200;
+            response.status="error";
+            response.error_code="2004",
+            response.error_msg= constants.messages['2004']
+            res.json(response);
+
+        }else{
+
+            var query = {
+                "request_id":request_id,
+                "notified_vendors.vendor_id":parseInt(vendor_id)
+            }
+            var operator ={$set:{"notified_vendors.$.pp_price":parseInt(price)}}
+            var option = {'upsert' : true};
+
+            mongo.newPrice(query,operator,option,function(err,success){
+
+                if(err)
+                    next(err);
+                else{
+                    response.statusCode=200;
+                    response.status="success";
+                    res.json(response);
+                }
+
+            });
+
+        }
     }
 
 }
