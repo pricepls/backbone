@@ -310,7 +310,7 @@ var vendor={
 
             var query={
 
-                "accepted_vendor.id":parseInt(vendor_id)
+                "accepted_vendor.vendor_id":parseInt(vendor_id)
             }
 
             mongo.confirmedBookings(query,function(err,bookings){
