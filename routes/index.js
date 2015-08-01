@@ -13,6 +13,7 @@ router.get('/admin/viewAllRequests',admin.viewAllRequests)
 
 router.post('/vendor/login',vendor.login);
 router.post('/vendor/new',vendor.createVendor);
+router.get('/vendor/getlisting',vendor.getListingDetails);
 router.post('/vendor/listing/new',vendor.createListing);
 router.post('/vendor/new-price',vendor.newPrice);
 router.get('/vendor/new-requests',vendor.getNewrequests);

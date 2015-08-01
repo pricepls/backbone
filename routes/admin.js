@@ -35,31 +35,7 @@ var admin={
             res.json(response);
         }else{
 
-            password=md5(password);
-            mysqlDB.findAdmin(phone,password,function(err,admin){
 
-                if(err)
-                    next();
-                else{
-                    if(admin!==undefined){
-
-                        response.statusCode=200;
-                        response.status="success";
-                        response.data=admin;
-                        res.json(response);
-
-                    }else{
-
-                        response.statusCode=200;
-                        response.status="success";
-                        response.error_code="1002";
-                        response.error_msg=constants.messages['1002'];
-                        res.json(response);
-
-                    }
-
-                }
-            });
         }
 
     },

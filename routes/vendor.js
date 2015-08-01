@@ -377,6 +377,43 @@ var vendor={
             });
 
         }
+    },
+    getListingDetails : function(req,res,next){
+
+        var response = {
+            status: "",
+            error_code: "",
+            error_msg: ""
+        }
+
+        var vendor_id= req.query.vendor || undefined;
+        if(vendor_id === undefined){
+
+            response.statusCode=200;
+            response.status="error";
+            response.error_code="2004",
+            response.error_msg= constants.messages['2004']
+            res.json(response);
+        }else {
+            var query = {
+                vendor_id : parseInt(vendor_id)
+            }
+
+            mongo.getVendorListing(query, function (err, listingData) {
+
+                if(err)
+                    next(err);
+                else{
+
+                    response.statusCode=200;
+                    response.status="success";
+                    response.data = listingData ||{};
+                    res.json(response); 
+                }
+
+            });
+        }
+
     }
 
 }
