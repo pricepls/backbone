@@ -97,8 +97,9 @@ var vendor={
 
                 }else{
 
-                    var password = md5(chance.word({length: 6}));
-                    mysqlDB.newVendor(phone,password,contactno,name,function(err,success){
+                    var password = chance.word({length: 6});
+                    var encrypted=md5(password);
+                    mysqlDB.newVendor(phone,encrypted,contactno,name,function(err,success){
 
                         if(err)
                             next();
@@ -408,11 +409,130 @@ var vendor={
                     response.statusCode=200;
                     response.status="success";
                     response.data = listingData ||{};
-                    res.json(response); 
+                    res.json(response);
                 }
 
             });
         }
+
+    },
+    config : function(req,res,next){
+
+        var config = {
+          "LISTING":{},
+          "CATEGORIES":[],
+          "SUB_TYPES":[],
+          "AMENITIES":[],
+          "LATEST_VERSION":1,
+          "FORCE_UPGRADE":false,
+          "SHOW_UPDATE_MESSAGE":true
+        };
+
+        var listing_id = req.body.listing_id || undefined;
+
+
+        async.parallel([
+
+
+            function(callback){
+
+                mysqlDB.getAllCategories(function(err,categories){
+                    if(err)
+                        return callback(err)
+                    else{
+                        config.CATEGORIES = categories;
+                    }
+                })
+
+            },
+            function(callback){
+
+                mysqlDB.findAllAmenities(function(err,amenities){
+
+                    if(err)
+                        return callback(err);
+                    else {
+
+                        config.AMENITIES = amenities;
+
+                    }
+                });
+
+
+            },
+            function(callback){
+
+                mysqlDB.getAllSubtypes(function(err,subtypes){
+
+                    if(err)
+                        return callback(err);
+                    else {
+
+                        config.SUB_TYPES = subtypes;
+
+                    }
+
+                });
+
+            },
+            function(callback){
+
+                if(listing_id !== undefined){
+
+                    //mongo.
+
+
+                }else
+                    callback();
+
+            }
+
+
+        ],function(err){
+
+            if(err)
+                next(err);
+
+        });
+    },
+    addGCMToken : function(req,res,next){
+
+        var listing_id  = req.body.listing_id || undefined;
+        var vendor_id = req.body.vendor_id || undefined;
+        var gcm_token = req.body.gcm_token || undefined;
+        var response={
+            status:"",
+            error_code:"",
+            error_msg:""
+        }
+        if(listing_id !== undefined && vendor_id !== undefined){
+
+            mongo.saveGCMToken(listing_id,vendor_id,gcm_token,function(err,status){
+
+                if(err){
+                    response.status="error";
+                    response.error_code = "2005";
+                    response.error_msg = constants.messages["2005"];
+                    res.json(response);
+                }else{
+
+                    response.status="success";
+                    res.json(response);
+                }
+
+
+            });
+
+        }else {
+
+            response.status="error";
+            response.error_code = "2005";
+            response.error_msg = constants.messages["2005"];
+            res.json(response);
+        }
+
+
+
 
     }
 

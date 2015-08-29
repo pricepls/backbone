@@ -11,7 +11,10 @@ router.get('/admin/getstatus',admin.getStatus);
 router.get('/admin/viewAllRequests',admin.viewAllRequests)
 /* all vendor related routes */
 
+
+router.get('/vendor/config',vendor.config);
 router.post('/vendor/login',vendor.login);
+router.post('/vendor/addgcmtoken',vendor.addGCMToken);
 router.post('/vendor/new',vendor.createVendor);
 router.get('/vendor/getlisting',vendor.getListingDetails);
 router.post('/vendor/listing/new',vendor.createListing);
