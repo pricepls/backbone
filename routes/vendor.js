@@ -570,7 +570,12 @@ var vendor={
 
                     if(token !== null){
 
-                        gcm.sendGCMNotification(token,function(err,status){
+                        var message = {
+                            requestID : "PPR_4J_fk_mK",
+                            user_name : "Adarsh Raj"
+                        }
+
+                        gcm.sendGCMNotification(token,message,1,function(err,status){
 
                             if(err)
                                 next(err);
