@@ -533,7 +533,7 @@ var vendor={
 
 
     },
-    samplegcm: function(req,res,next){
+    samplegcm : function(req,res,next){
 
         var response={
             status:"",
