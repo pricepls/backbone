@@ -41,10 +41,27 @@ var vendor={
                 else{
                     if(vendor!==undefined){
 
-                        response.statusCode=200;
-                        response.status="success";
-                        response.data=vendor;
-                        res.json(response);
+                        mongo.getListingId(vendor.id,function(err,listingid){
+
+                            if(err)
+                                callback(err);
+                            else{
+
+                                if(listingid !== null){
+                                    vendor.listing_id = listingid;
+                                }else
+                                    vendor.listing_id=null;
+
+                                response.statusCode=200;
+                                response.status="success";
+                                response.data=vendor;
+                                res.json(response);
+
+                            }
+
+                        })
+
+
 
                     }else{
 
