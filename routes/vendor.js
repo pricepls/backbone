@@ -7,6 +7,7 @@ var shortId=require('shortid');
 var constants=app.get('constants');
 var mysqlDB=require('../lib/mysqldb')();
 var mongo=require('../lib/mongodb');
+var gcm = require('../lib/gcm');
 var moment=require('moment');
 
 mysqlDB.init();
@@ -515,12 +516,9 @@ var vendor={
                     response.error_msg = constants.messages["2005"];
                     res.json(response);
                 }else{
-
                     response.status="success";
                     res.json(response);
                 }
-
-
             });
 
         }else {
@@ -533,6 +531,62 @@ var vendor={
 
 
 
+
+    },
+    samplegcm: function(req,res,next){
+
+        var response={
+            status:"",
+            error_code:"",
+            error_msg:""
+        }
+
+        var listing_id = req.query.listing_id || undefined;
+        if(listing_id !== undefined){
+
+
+            mongo.getGCMToken(listing_id,function(err,token){
+
+                if(err){
+                    next(err);
+                }else{
+
+                    if(token !== null){
+
+                        gcm.sendGCMNotification(token,function(err,status){
+
+                            if(err)
+                                next(err);
+                            else{
+
+                                response.status="success";
+                                response.data=status;
+                                res.json(response);
+
+                            }
+                        });
+
+
+                    }else{
+
+                        response.status="error";
+                        response.error_code = "2007";
+                        response.error_msg = constants.messages["2007"];
+                        res.json(response);
+
+                    }
+
+                }
+            })
+
+
+        }else{
+
+            response.status="error";
+            response.error_code = "2008";
+            response.error_msg = constants.messages["2008"];
+            res.json(response);
+        }
 
     }
 

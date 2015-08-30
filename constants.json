@@ -10,8 +10,9 @@
     "3001":"Please mention all the details",
     "2004":"Please mention all fields",
     "2005":"Need both listing id and vendor id to add a token",
-    "2006":"Successfully updated gcm token"
-
+    "2006":"Successfully updated gcm token",
+    "2007":"No listing id",
+    "2008":"No gcm token"
 
   }
 

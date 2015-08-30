@@ -19,7 +19,8 @@
     "MD5":"1.2.2",
     "chance":"0.7.6",
     "mongoskin":"1.4.13",
-    "shortid":"2.2.2"
+    "shortid":"2.2.2",
+    "gcm":"1.0.1"
 
   },
   "private":true
