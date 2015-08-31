@@ -448,7 +448,6 @@ var vendor={
 
         var listing_id = req.body.listing_id || undefined;
 
-
         async.parallel([
 
 
@@ -459,19 +458,20 @@ var vendor={
                         return callback(err)
                     else{
                         config.CATEGORIES = categories;
+                        callback();
                     }
                 })
 
             },
             function(callback){
 
-                mysqlDB.findAllAmenities(function(err,amenities){
+                mysqlDB.getAllAmenities(function(err,amenities){
 
                     if(err)
                         return callback(err);
                     else {
-
                         config.AMENITIES = amenities;
+                        callback();
 
                     }
                 });
@@ -485,31 +485,31 @@ var vendor={
                     if(err)
                         return callback(err);
                     else {
-
                         config.SUB_TYPES = subtypes;
-
+                        callback();
                     }
 
                 });
 
-            },
-            function(callback){
-
-                if(listing_id !== undefined){
-
-                    //mongo.
-
-
-                }else
-                    callback();
-
             }
+            //,
+            //function(callback){
+            //
+            //    if(listing_id !== undefined){
+            //
+            //        callback
+            //
+            //    }else
+            //        callback();
+            //
+            //}
 
 
         ],function(err){
 
             if(err)
                 next(err);
+            res.json(config);
 
         });
     },
