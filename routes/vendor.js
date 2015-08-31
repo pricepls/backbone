@@ -575,7 +575,7 @@ var vendor={
                             user_name : "Adarsh Raj"
                         }
                         var token_array = [token];
-                        gcm.sendGCMNotification(token,message,1,function(err,status){
+                        gcm.sendGCMNotification(token_array,message,1,function(err,status){
 
                             if(err)
                                 next(err);
