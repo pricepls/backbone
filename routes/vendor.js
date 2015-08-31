@@ -610,7 +610,36 @@ var vendor={
             res.json(response);
         }
 
+    },
+    getBalance : function(req,res,next){
+
+        var response={
+            status:"",
+            error_code:"",
+            error_msg:""
+        }
+
+        var vendor_id = req.query.vendor_id || undefined;
+        if(vendor_id !== undefined){
+
+
+            var balance = {
+                balance : 300
+            }
+            response.status="success";
+            response.data = balance;
+            res.send(response);
+
+
+        }else{
+            response.status="error";
+            response.error_code = "2003";
+            response.error_msg = constants.messages["2003"];
+            res.json(response);
+        }
+
     }
+
 
 }
 
