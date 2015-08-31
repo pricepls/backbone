@@ -574,8 +574,8 @@ var vendor={
                             requestID : "PPR_4J_fk_mK",
                             user_name : "Adarsh Raj"
                         }
-
-                        gcm.sendGCMNotification(token,function(err,status){
+                        var token_array = [token];
+                        gcm.sendGCMNotification(token,message,1,function(err,status){
 
                             if(err)
                                 next(err);
