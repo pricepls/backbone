@@ -12,7 +12,12 @@
     "2005":"Need both listing id and vendor id to add a token",
     "2006":"Successfully updated gcm token",
     "2007":"No listing id",
-    "2008":"No gcm token"
+    "2008":"No gcm token",
+    "2009":"Plase provide booking id",
+    "2010":"No data found for this booking id",
+    "2011":"Please provide request id",
+    "2012":"No data found for this request id",
+    "3001":"Price quoted successfully"
 
   }
 

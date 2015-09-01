@@ -4,7 +4,7 @@ var express=require('express'),
 
 app=express();
 
-app.use(logger('dev'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
@@ -21,10 +21,12 @@ var configs;
 // reading config based on env
 if(app.get('env')=='development'){
 
+    app.use(logger('combined'));
     configs=configFile.development;
 
 }else{
 
+    app.use(logger('dev'));
     configs=configFile.production;
 
 }

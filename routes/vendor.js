@@ -390,6 +390,7 @@ var vendor={
                 else{
                     response.statusCode=200;
                     response.status="success";
+                    response.data = constants.messages['3001'];
                     res.json(response);
                 }
 
@@ -650,9 +651,86 @@ var vendor={
             res.json(response);
         }
 
+    },
+    getBookingDetails : function(req,res,next){
+
+        var response={
+            status:"",
+            error_code:"",
+            error_msg:""
+        }
+
+        var booking_id = req.query.booking_id || undefined;
+        if(booking_id === undefined){
+
+            response.status="error";
+            response.error_code = "2009";
+            response.error_msg = constants.messages["2009"];
+            res.json(response);
+
+        }else{
+
+            mongo.getBookingDetails(booking_id,function(err,bookingData){
+
+                if(err){
+                    next(err);
+                }else{
+                    if(bookingData !==null){
+
+                        response.status="success";
+                        response.data = bookingData;
+                        res.json(response);
+                    }else{
+
+                        response.status="error";
+                        response.error_code = "2010";
+                        response.error_msg = constants.messages["2010"];
+                        res.json(response);
+                    }
+                }
+            });
+
+       }
+    },
+    getRequestDetails :function(req,res,next){
+
+        var response={
+            status:"",
+            error_code:"",
+            error_msg:""
+        }
+
+        var request_id = req.query.request_id || undefined;
+        if(request_id === undefined){
+
+            response.status="error";
+            response.error_code = "2011";
+            response.error_msg = constants.messages["2011"];
+            res.json(response);
+
+        }else{
+
+            mongo.getRequestDetails(request_id,function(err,requestData){
+
+                if(err){
+                    next(err);
+                }else{
+                    if(requestData !==null){
+
+                        response.status="success";
+                        response.data = requestData;
+                        res.json(response);
+                    }else{
+
+                        response.status="error";
+                        response.error_code = "2012";
+                        response.error_msg = constants.messages["2012"];
+                        res.json(response);
+                    }
+                }
+            });
+        }
     }
-
-
 }
 
 module.exports = vendor;

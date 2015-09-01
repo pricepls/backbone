@@ -21,7 +21,9 @@ router.post('/vendor/listing/new',vendor.createListing);
 router.post('/vendor/new-price',vendor.newPrice);
 router.get('/vendor/new-requests',vendor.getNewrequests);
 router.get('/vendor/replied-requests',vendor.repliedRequests);
+router.get('/vendor/getrequest',vendor.getRequestDetails);
 router.get('/vendor/confimed-bookings',vendor.confirmedBookings);
+router.get('/vendor/getbooking',vendor.getBookingDetails);
 router.get('/vendor/balance',vendor.getBalance);
 router.get('/vendor/samplegcm',vendor.samplegcm);
 
