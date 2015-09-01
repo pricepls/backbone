@@ -570,12 +570,24 @@ var vendor={
 
                     if(token !== null){
 
+                        var type = 1;
+
                         var message = {
                             requestID : "PPR_4J_fk_mK",
                             user_name : "Adarsh Raj"
                         }
+
+                        if(req.query.type==2){
+
+                            type = 2;
+                            var message = {
+                                bookingID : "PPB_EyK_fFTF",
+                                user_name : "Adarsh Raj"
+                            }
+
+                        }
                         var token_array = [token];
-                        gcm.sendGCMNotification(token_array,message,1,function(err,status){
+                        gcm.sendGCMNotification(token_array,message,type,function(err,status){
 
                             if(err)
                                 next(err);
