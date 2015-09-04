@@ -15,34 +15,69 @@ var request = {
             error_code:"",
             error_msg:""
         }
-
+        var requests_obj = [];
         var vendor_id=req.query.vendor || undefined;
         if(vendor_id !== undefined){
 
-            var query={
 
+            var query={
                 /* query using element match */
                 "notified_vendors":{
                     $elemMatch:{
                         vendor_id : parseInt(vendor_id),
                         pp_price : { $exists : false }
-
                     }
                 }
-
                 /* query using dot operator need to validate the performance of both  */
 
                 //"notified_vendors.vendor_id":parseInt(vendor_id)
             }
-            mongo.getNewrequests(query,function(err,requests){
+
+            var projection = {
+                request_id:1,
+                user_id:1,
+                requested_date:1,
+                no_of_guests:1,
+                no_of_nights:1,
+                user_details:1
+            }
+            mongo.getNewrequests(query,projection,function(err,requests){
 
                 if(err)
                     next(err);
                 else{
-                    response.statusCode=200;
-                    response.status="success";
-                    response.data=requests || {};
-                    res.json(response);
+
+                    if(requests !== null){
+
+                        async.forEach(requests,function(eachrequest,callback){
+
+                            var request = eachrequest;
+                            request.name = eachrequest.user_details.name;
+                            request.best_offer = 5000;
+                            delete request.user_details;
+                            requests_obj.push(request);
+                            callback();
+
+                        },function(err){
+
+                            response.statusCode=200;
+                            response.status="success";
+                            response.data= requests_obj;
+                            res.json(response);
+
+                        });
+
+                    }else{
+
+                        response.statusCode=200;
+                        response.status="success";
+                        response.data= requests_obj;
+                        res.json(response);
+
+                    }
+
+
+
                 }
             });
         }else{
@@ -61,7 +96,7 @@ var request = {
             error_code: "",
             error_msg: ""
         }
-
+        var requests_obj = [];
         var vendor_id = req.query.vendor || undefined;
         if (vendor_id !== undefined) {
 
@@ -72,16 +107,51 @@ var request = {
                         pp_price : { $exists : true }  }
                 }
             }
+            var projection = {
+                request_id:1,
+                user_id:1,
+                requested_date:1,
+                no_of_guests:1,
+                no_of_nights:1,
+                user_details:1
 
-            mongo.getRepliedRequests(query,function(err,requests){
+            }
+            mongo.getRepliedRequests(query,projection,function(err,requests){
 
                 if(err)
                     next(err);
                 else{
-                    response.statusCode=200;
-                    response.status="success";
-                    response.data=requests || {};
-                    res.json(response);
+
+                    if(requests !==null){
+
+                        async.forEach(requests,function(eachrequest,callback){
+
+                            var request = eachrequest;
+                            request.name = eachrequest.user_details.name;
+                            request.best_offer = 5000;
+                            request.is_yours_best = true;
+                            delete request.user_details;
+                            requests_obj.push(request);
+                            callback();
+
+                        },function(err){
+
+                            response.statusCode=200;
+                            response.status="success";
+                            response.data= requests_obj;
+                            res.json(response);
+
+                        });
+
+                    }else{
+
+                        response.statusCode=200;
+                        response.status="success";
+                        response.data= request_obj;
+                        res.json(response);
+                    }
+
+
                 }
             });
         }else{
@@ -102,7 +172,8 @@ var request = {
         }
 
         var request_id = req.query.request_id || undefined;
-        if(request_id === undefined){
+        var vendor_id = req.query.vendor_id || undefined;
+        if(request_id === undefined && vendor_id !== undefined){
 
             response.status="error";
             response.error_code = "2011";
@@ -111,16 +182,36 @@ var request = {
 
         }else{
 
-            mongo.getRequestDetails(request_id,function(err,requestData){
+            mongo.getRequestDetails(request_id,vendor_id,function(err,requestData){
 
                 if(err){
                     next(err);
                 }else{
                     if(requestData !==null){
 
+                        //async.forEach(requestData.notified_vendors,function(each_vendor,callback){
+                        //
+                        //    if(each_vendor === vendor_id ){
+                        //        requestData.pp_price = each_vendor.pp_price;
+                        //    }
+                        //    callback();
+                        //
+                        //
+                        //},function(err){
+                        //
+                        //    if(err)
+                        //        return next(err);
+                        //    delete requestData.notified_vendors;
+                        //
+                        //
+                        //
+                        //});
+
                         response.status="success";
                         response.data = requestData;
                         res.json(response);
+
+
 
                     }else{
 

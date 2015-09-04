@@ -17,8 +17,9 @@ router.get('/vendor/balance',vendor.getBalance);
 router.get('/vendor/samplegcm',vendor.samplegcm);
 
 
-router.get('/vendor/listing/getlisting',listing.getListingDetails);
 router.post('/vendor/listing/new',listing.createListing);
+router.get('/vendor/listing/getlisting',listing.getListingDetails);
+
 
 router.get('/vendor/new-requests',request.getNewrequests);
 router.get('/vendor/replied-requests',request.repliedRequests);

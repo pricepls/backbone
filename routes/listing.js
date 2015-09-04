@@ -25,9 +25,10 @@ var listing = {
             response.statusCode = 200;
             response.status = "error";
             response.error_code = "2004",
-                response.error_msg = constants.messages['2004']
+            response.error_msg = constants.messages['2004']
             res.json(response);
         } else {
+
             var query = {
                 vendor_id: parseInt(vendor_id)
             }
@@ -58,17 +59,15 @@ var listing = {
 
         var area = req.body.area;
         var city = req.body.city;
-        var city_id = parseInt(req.body.city_id);
         var state = req.body.state;
         var country = req.body.country;
         var lat = req.body.lat.toString();
         var long = req.body.long.toString();
+        var vendor_id = parseInt(req.body.vendor);
+        var category = req.body.category_id;
+        var sub_category = req.body.subtype_id;
         var amenities = [];
         amenities = req.body.amenities;
-        var vendor_id = parseInt(req.body.vendor);
-        var category = req.body.category;
-        var category_id = parseInt(req.body.category_id);
-        var sub_category = req.body.subcategory;
         var star_rating = req.body.star_rating;
         var vendor_obj = {};
         var room_types = [];
