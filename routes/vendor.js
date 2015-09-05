@@ -338,7 +338,26 @@ var vendor={
 
 
             var balance = {
-                balance : 300
+                balance : 300,
+                recharge_options :[
+                    {
+                        amount : 100,
+                        credit : 120
+                    },
+                    {
+                        amount: 200,
+                        credit: 220
+                    },
+                    {
+                        amount : 300,
+                        credit : 320
+                    },
+                    {
+                        amount : 400,
+                        credit : 420
+                    }
+                ]
+
             }
             response.status="success";
             response.data = balance;
