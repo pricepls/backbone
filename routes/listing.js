@@ -6,8 +6,6 @@ var mongo=require('../lib/mongodb');
 
 
 
-
-
 var listing = {
 
 
@@ -43,6 +41,7 @@ var listing = {
                     response.status = "success";
                     response.data = listingData || {};
                     res.json(response);
+
                 }
 
             });

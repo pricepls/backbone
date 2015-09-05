@@ -189,23 +189,6 @@ var request = {
                 }else{
                     if(requestData !==null){
 
-                        //async.forEach(requestData.notified_vendors,function(each_vendor,callback){
-                        //
-                        //    if(each_vendor === vendor_id ){
-                        //        requestData.pp_price = each_vendor.pp_price;
-                        //    }
-                        //    callback();
-                        //
-                        //
-                        //},function(err){
-                        //
-                        //    if(err)
-                        //        return next(err);
-                        //    delete requestData.notified_vendors;
-                        //
-                        //
-                        //
-                        //});
 
                         response.status="success";
                         response.data = requestData;
@@ -244,11 +227,22 @@ var request = {
 
         }else{
 
+            price = JSON.parse(price);
+            //var quoted_price = [];
+            //for(var i=0; i <price.length; i++){
+            //
+            //    var each_price = {};
+            //    each_price.room_type =
+            //
+            //    quoted_price.push(price[i]);
+            //}
+
+            //console.log(quoted_price);
             var query = {
                 "request_id":request_id,
                 "notified_vendors.vendor_id":parseInt(vendor_id)
             }
-            var operator ={$set:{"notified_vendors.$.pp_price":parseInt(price)}}
+            var operator ={$set:{"notified_vendors.$.pp_price":price}}
             var option = {'upsert' : true};
 
             mongo.newPrice(query,operator,option,function(err,success){
