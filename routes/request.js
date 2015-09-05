@@ -227,7 +227,7 @@ var request = {
 
         }else{
 
-            price = JSON.parse(price);
+            //price = JSON.stringify(price);
             //var quoted_price = [];
             //for(var i=0; i <price.length; i++){
             //
@@ -252,7 +252,7 @@ var request = {
                 else{
                     response.statusCode=200;
                     response.status="success";
-                    response.data = constants.messages['3001'];
+                    response.message = constants.messages['3001'];
                     res.json(response);
                 }
 
