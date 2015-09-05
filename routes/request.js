@@ -227,7 +227,7 @@ var request = {
 
         }else{
 
-            //price = JSON.stringify(price);
+            price = JSON.stringify(price);
             //var quoted_price = [];
             //for(var i=0; i <price.length; i++){
             //
