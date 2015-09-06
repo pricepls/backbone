@@ -20,9 +20,7 @@ var vendor={
         var password=req.body.password || undefined;
 
         var response={
-            status:"",
-            error_code:"",
-            error_msg:""
+            status:""
         }
 
         if(phone==undefined || password==undefined){
@@ -81,9 +79,7 @@ var vendor={
         var contactno=req.body.contactno || undefined;
 
         var response={
-            status:"",
-            error_code:"",
-            error_msg:""
+            status:""
         }
 
 
@@ -221,9 +217,7 @@ var vendor={
         var vendor_id = req.body.vendor_id || undefined;
         var gcm_token = req.body.gcm_token || undefined;
         var response={
-            status:"",
-            error_code:"",
-            error_msg:""
+            status:""
         }
         if(listing_id !== undefined && vendor_id !== undefined){
 
@@ -328,9 +322,7 @@ var vendor={
     getBalance : function(req,res,next){
 
         var response={
-            status:"",
-            error_code:"",
-            error_msg:""
+            status:""
         }
 
         var vendor_id = req.query.vendor_id || undefined;
@@ -371,6 +363,99 @@ var vendor={
             res.json(response);
         }
 
+    },
+    forgotPassword : function(req,res,next){
+
+        var phone_number = req.body.phone || undefined;
+        var response = {
+            status:""
+        }
+
+        if(phone_number !== undefined){
+
+            mysqlDB.findVendorByPhone(phone_number,function(err,vendor){
+
+                if(err){
+                    next(err);
+                }else{
+
+                    if(vendor !== null){
+
+                        var password = chance.word({length: 6});
+                        var encrypted=md5(password);
+                        mysqlDB.updateVendorPassword(phone_number,encrypted,function(err,status){
+
+                           if(err)
+                            next(err);
+                           else{
+                               response.status="success";
+                               response.message=constants.messages['3002'];
+                               res.json(response);
+                           }
+                        });
+                    }else{
+
+                        response.status="error";
+                        response.error_code="1002"
+                        response.error_msg=constants.messages['1002'];
+                        res.json(response);
+
+                    }
+
+                }
+            });
+        }else{
+            response.status="error";
+            response.error_code="2013"
+            response.error_msg=constants.messages['2013'];
+            res.json(response);
+        }
+    },
+    changePassword :function(req,res,next){
+
+        var old_password = req.body.old_pwd || undefined;
+        var new_password = req.body.new_pwd || undefined;
+        var vendor_id = req.body.vendor_id || undefined;
+        var response = {
+            status :""
+        }
+        if(vendor_id !== undefined && new_password !== undefined && old_password !== undefined){
+
+            var old_password=md5(old_password);
+            mysqlDB.findVendorByIdandPwd(vendor_id,old_password,function(err,vendor){
+
+                if(err)
+                    next(err);
+                else{
+
+                    if(vendor == null) {
+                        response.status = "error";
+                        response.error_code = "2015";
+                        response.error_msg = constants.messages['2015'];
+                        res.json(response);
+                    }else{
+
+                        var encrypted=md5(new_password);
+                        mysqlDB.updateVendorPassword(vendor.phone,encrypted,function(err,status){
+
+                            if(err)
+                                next(err);
+                            response.status = "success";
+                            response.message = constants.messages['3003'];
+                            res.json(response);
+                        })
+                    }
+                }
+
+            });
+
+        }else {
+
+            response.status = "error";
+            response.error_code = "2014";
+            response.error_msg = constants.messages['2014'];
+            res.json(response);
+        }
     }
 }
 

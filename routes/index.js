@@ -15,6 +15,8 @@ router.post('/vendor/addgcmtoken',vendor.addGCMToken);
 router.post('/vendor/new',vendor.createVendor);
 router.get('/vendor/balance',vendor.getBalance);
 router.get('/vendor/samplegcm',vendor.samplegcm);
+router.post('/vendor/forgot-password',vendor.forgotPassword);
+router.post('/vendor/change-password',vendor.changePassword);
 
 
 router.post('/vendor/listing/new',listing.createListing);

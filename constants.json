@@ -3,7 +3,7 @@
   "messages":{
 
     "1001":"Oho ! that was a close miss",
-    "1002":"Sorry I think you are not with us",
+    "1002":"Sorry we think you are not with us",
     "2001":"Vendor doesn't exists",
     "2002":"Phone number already exists",
     "2003":"Please mention vendor id",
@@ -17,7 +17,12 @@
     "2010":"No data found for this booking id",
     "2011":"Please provide request id",
     "2012":"No data found for this request id",
-    "3001":"Price quoted successfully"
+    "2013":"Please send your registered phone no",
+    "2014":"Need all the fields",
+    "2015":"You old password is not correct",
+    "3001":"Price quoted successfully",
+    "3002":"We have sent your new password",
+    "3003":"Password update successfully"
 
   }
 
