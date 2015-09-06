@@ -16,19 +16,59 @@ var booking = {
         var vendor_id = req.query.vendor || undefined;
         if (vendor_id !== undefined) {
 
+            var booking_obj= [];
             var query={
                 "accepted_vendor.vendor_id":parseInt(vendor_id)
             }
+            var projection = {
+                booking_id:1,
+                user_details:1,
+                no_of_nights:1,
+                requested_date:1
 
-            mongo.confirmedBookings(query,function(err,bookings){
+            }
+
+            mongo.confirmedBookings(query,projection,function(err,bookings){
 
                 if(err)
                     next(err);
                 else{
-                    response.statusCode=200;
-                    response.status="success";
-                    response.data=bookings || {};
-                    res.json(response);
+
+                    if(bookings !== null){
+
+                        async.forEach(bookings,function(eachBooking,callback){
+
+                            var booking = {};
+                            booking = eachBooking;
+                            booking.user_name = eachBooking.user_details.name;
+                            delete booking.user_details;
+                            booking_obj.push(booking);
+                            callback();
+
+                        },function(err){
+
+                            if(err)
+                                next(err);
+
+                            response.statusCode=200;
+                            response.status="success";
+                            response.data=booking_obj;
+                            res.json(response);
+                        })
+
+
+                    }else{
+
+                        response.statusCode=200;
+                        response.status="success";
+                        response.message = constants.messages[2016];
+                        response.data={};
+                        res.json(response);
+
+                    }
+
+
+
                 }
 
             });
@@ -68,7 +108,7 @@ var booking = {
                     if(bookingData !==null){
 
                         response.status="success";
-                        response.data = bookingData;
+                        response.data = bookingData[0];
                         res.json(response);
                     }else{
 
