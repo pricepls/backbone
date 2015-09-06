@@ -10,9 +10,7 @@ var booking = {
     confirmedBookings:function(req,res,next){
 
         var response = {
-            status: "",
-            error_code: "",
-            error_msg: ""
+            status: ""
         }
 
         var vendor_id = req.query.vendor || undefined;
@@ -40,7 +38,7 @@ var booking = {
             response.statusCode=200;
             response.status="error";
             response.error_code="2003",
-                response.error_msg= constants.messages['2003']
+            response.error_msg= constants.messages['2003']
             res.json(response);
 
         }
@@ -49,9 +47,7 @@ var booking = {
     getBookingDetails : function(req,res,next){
 
         var response={
-            status:"",
-            error_code:"",
-            error_msg:""
+            status:""
         }
 
         var booking_id = req.query.booking_id || undefined;
@@ -83,7 +79,6 @@ var booking = {
                     }
                 }
             });
-
         }
     }
 

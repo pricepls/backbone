@@ -12,9 +12,7 @@ var listing = {
     getListingDetails: function (req, res, next) {
 
         var response = {
-            status: "",
-            error_code: "",
-            error_msg: ""
+            status: ""
         }
 
         var vendor_id = req.query.vendor || undefined;

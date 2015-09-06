@@ -11,14 +11,11 @@ var request = {
     getNewrequests:function(req,res,next){
 
         var response={
-            status:"",
-            error_code:"",
-            error_msg:""
+            status:""
         }
         var requests_obj = [];
         var vendor_id=req.query.vendor || undefined;
         if(vendor_id !== undefined){
-
 
             var query={
                 /* query using element match */
@@ -85,16 +82,14 @@ var request = {
             response.statusCode=200;
             response.status="error";
             response.error_code="2003",
-                response.error_msg= constants.messages['2003']
+            response.error_msg= constants.messages['2003']
             res.json(response);
         }
     },
     repliedRequests:function(req,res) {
 
         var response = {
-            status: "",
-            error_code: "",
-            error_msg: ""
+            status: ""
         }
         var requests_obj = [];
         var vendor_id = req.query.vendor || undefined;
@@ -159,16 +154,14 @@ var request = {
             response.statusCode=200;
             response.status="error";
             response.error_code="2003",
-                response.error_msg= constants.messages['2003']
+            response.error_msg= constants.messages['2003']
             res.json(response);
         }
     },
     getRequestDetails :function(req,res,next){
 
         var response={
-            status:"",
-            error_code:"",
-            error_msg:""
+            status:""
         }
 
         var request_id = req.query.request_id || undefined;
@@ -188,16 +181,10 @@ var request = {
                     next(err);
                 }else{
                     if(requestData !==null){
-
-
                         response.status="success";
                         response.data = requestData;
                         res.json(response);
-
-
-
                     }else{
-
                         response.status="error";
                         response.error_code = "2012";
                         response.error_msg = constants.messages["2012"];
@@ -210,9 +197,7 @@ var request = {
     newPrice : function(req,res,next){
 
         var response = {
-            status: "",
-            error_code: "",
-            error_msg: ""
+            status: ""
         }
         var vendor_id = req.body.vendor || undefined;
         var request_id = req.body.request || undefined;
@@ -222,7 +207,7 @@ var request = {
             response.statusCode=200;
             response.status="error";
             response.error_code="2004",
-                response.error_msg= constants.messages['2004']
+            response.error_msg= constants.messages['2004']
             res.json(response);
 
         }else{
