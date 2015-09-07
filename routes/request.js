@@ -22,7 +22,8 @@ var request = {
                 "notified_vendors":{
                     $elemMatch:{
                         vendor_id : parseInt(vendor_id),
-                        pp_price : { $exists : false }
+                        pp_price : { $exists : false },
+                        status:{ $exists : false }
                     }
                 }
                 /* query using dot operator need to validate the performance of both  */
@@ -99,7 +100,10 @@ var request = {
                 "notified_vendors":{
                     $elemMatch:{
                         vendor_id : parseInt(vendor_id),
-                        pp_price : { $exists : true }  }
+                        status:{ $exists : true , $eq : "accepted" },
+                        pp_price :{ $exists : true }
+
+                    }
                 }
             }
             var projection = {
@@ -182,7 +186,7 @@ var request = {
                 }else{
                     if(requestData !==null){
                         response.status="success";
-                        requestData.best_offer=5000;    
+                        requestData.best_offer=5000;
                         response.data = requestData;
                         res.json(response);
                     }else{
@@ -197,7 +201,6 @@ var request = {
     },
     newPrice : function(req,res,next){
 
-        console.log("new price"+req);
 
         var response = {
             status: ""
@@ -205,7 +208,8 @@ var request = {
         var vendor_id = req.body.vendor || undefined;
         var request_id = req.body.request || undefined;
         var price = req.body.price || undefined;
-        if(vendor_id === undefined && request_id !== undefined && price !== undefined){
+        var action = req.body.action || undefined;
+        if(vendor_id === undefined && request_id !== undefined && action !== undefined){
 
             response.statusCode=200;
             response.status="error";
@@ -215,23 +219,30 @@ var request = {
 
         }else{
 
-            price = JSON.parse(price);
-            var quoted_price = [];
-            var keys = Object.keys(price), len = keys.length;
-            for(var i = 0 ; i < len ; i++){
-                var each_quote= {};
-                each_quote.room_type= keys[i];
-                each_quote.price = price[keys[i]];
-                quoted_price.push(each_quote);
-            }
+            if(action === "rejected"){
+                var operator ={$set:{"notified_vendors.$.status":"rejected"},$unset:{"notified_vendors.$.pp_price":""}};
 
+            }else{
 
-            console.log(quoted_price);
+                price = JSON.parse(price);
+                var quoted_price = [];
+                var keys = Object.keys(price), len = keys.length;
+                for(var i = 0 ; i < len ; i++){
+                    var each_quote= {};
+                    each_quote.room_type= keys[i];
+                    each_quote.price = price[keys[i]];
+                    quoted_price.push(each_quote);
+                }
+                var operator ={$set:{"notified_vendors.$.pp_price":quoted_price,"notified_vendors.$.status":"accepted"}}
+           }
+
             var query = {
                 "request_id":request_id,
                 "notified_vendors.vendor_id":parseInt(vendor_id)
             }
-            var operator ={$set:{"notified_vendors.$.pp_price":quoted_price}}
+
+
+
             var option = {'upsert' : true};
 
             mongo.newPrice(query,operator,option,function(err,success){
