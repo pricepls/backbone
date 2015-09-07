@@ -282,7 +282,8 @@ var vendor={
                             }
 
                         }
-                        var token_array = [token];
+                        var token_array = [];
+                        token_array.push(token);
                         gcm.sendGCMNotification(token_array,message,type,function(err,status){
 
                             if(err)
