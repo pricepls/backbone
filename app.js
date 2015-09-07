@@ -21,12 +21,12 @@ var configs;
 // reading config based on env
 if(app.get('env')=='development'){
 
-    app.use(logger('combined'));
+    app.use(logger('short'));
     configs=configFile.development;
 
 }else{
 
-    app.use(logger('dev'));
+    app.use(logger('short'));
     configs=configFile.production;
 
 }

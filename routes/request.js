@@ -196,6 +196,8 @@ var request = {
     },
     newPrice : function(req,res,next){
 
+        console.log("new price"+req);
+
         var response = {
             status: ""
         }
