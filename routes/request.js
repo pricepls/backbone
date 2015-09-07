@@ -182,6 +182,7 @@ var request = {
                 }else{
                     if(requestData !==null){
                         response.status="success";
+                        requestData.best_offer=5000;    
                         response.data = requestData;
                         res.json(response);
                     }else{
