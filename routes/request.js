@@ -68,7 +68,7 @@ var request = {
 
                         response.statusCode=200;
                         response.status="success";
-                        response.data= requests_obj;
+                        response.data= {};
                         res.json(response);
 
                     }
@@ -214,22 +214,23 @@ var request = {
 
         }else{
 
-            price = JSON.stringify(price);
-            //var quoted_price = [];
-            //for(var i=0; i <price.length; i++){
-            //
-            //    var each_price = {};
-            //    each_price.room_type =
-            //
-            //    quoted_price.push(price[i]);
-            //}
+            price = JSON.parse(price);
+            var quoted_price = [];
+            var keys = Object.keys(price), len = keys.length;
+            for(var i = 0 ; i < len ; i++){
+                var each_quote= {};
+                each_quote.room_type= keys[i];
+                each_quote.price = price[keys[i]];
+                quoted_price.push(each_quote);
+            }
 
-            //console.log(quoted_price);
+
+            console.log(quoted_price);
             var query = {
                 "request_id":request_id,
                 "notified_vendors.vendor_id":parseInt(vendor_id)
             }
-            var operator ={$set:{"notified_vendors.$.pp_price":price}}
+            var operator ={$set:{"notified_vendors.$.pp_price":quoted_price}}
             var option = {'upsert' : true};
 
             mongo.newPrice(query,operator,option,function(err,success){
