@@ -187,6 +187,11 @@ var request = {
                     if(requestData !==null){
                         response.status="success";
                         requestData.best_offer=5000;
+                        var notified_vendors = requestData.notified_vendors[0];
+                        if(notified_vendors.pp_price){
+                            requestData.pp_price = notified_vendors.pp_price;
+                        }
+                        delete requestData.notified_vendors;
                         response.data = requestData;
                         res.json(response);
                     }else{

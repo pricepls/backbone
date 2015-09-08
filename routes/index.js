@@ -27,6 +27,7 @@ router.get('/vendor/new-requests',request.getNewrequests);
 router.get('/vendor/replied-requests',request.repliedRequests);
 router.get('/vendor/getrequest',request.getRequestDetails);
 router.post('/vendor/new-price',request.newPrice);
+//router.post('/vendor/recharge',request.rechargeAccount);
 
 
 router.get('/vendor/confimed-bookings',booking.confirmedBookings);
