@@ -209,6 +209,7 @@ var request = {
         var request_id = req.body.request || undefined;
         var price = req.body.price || undefined;
         var action = req.body.action || undefined;
+        var type = req.body.type || undefined;
         if(vendor_id === undefined && request_id !== undefined && action !== undefined){
 
             response.statusCode=200;
@@ -220,9 +221,10 @@ var request = {
         }else{
 
             if(action === "rejected"){
-                var operator ={$set:{"notified_vendors.$.status":"rejected"},$unset:{"notified_vendors.$.pp_price":""}};
+                var operator ={$set:{"notified_vendors.$.status":"rejected"},$unset:{"notified_vendors.$.pp_price":"","notified_vendors.$.type":""}};
 
             }else{
+
 
                 price = JSON.parse(price);
                 var quoted_price = [];
@@ -233,7 +235,7 @@ var request = {
                     each_quote.price = price[keys[i]];
                     quoted_price.push(each_quote);
                 }
-                var operator ={$set:{"notified_vendors.$.pp_price":quoted_price,"notified_vendors.$.status":"accepted"}}
+                var operator ={$set:{"notified_vendors.$.pp_price":quoted_price,"notified_vendors.$.status":"accepted","notified_vendors.$.type":type}}
            }
 
             var query = {
