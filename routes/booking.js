@@ -62,7 +62,7 @@ var booking = {
                         response.statusCode=200;
                         response.status="success";
                         response.message = constants.messages[2016];
-                        response.data={};
+                        response.data=[];
                         res.json(response);
 
                     }
