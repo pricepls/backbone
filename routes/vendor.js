@@ -277,7 +277,7 @@ var vendor={
 
                             type = 2;
                             var message = {
-                                bookingID : "PPB_EyK_fFTF",
+                                bookingID : "PPB_VJMjF8Lp",
                                 user_name : "Adarsh Raj"
                             }
 
