@@ -35,6 +35,7 @@ var request = {
                 request_id:1,
                 user_id:1,
                 requested_date:1,
+                created_date:1,
                 no_of_guests:1,
                 no_of_nights:1,
                 user_details:1
@@ -110,6 +111,7 @@ var request = {
                 request_id:1,
                 user_id:1,
                 requested_date:1,
+                created_date:1,
                 no_of_guests:1,
                 no_of_nights:1,
                 user_details:1
