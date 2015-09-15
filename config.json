@@ -14,7 +14,19 @@
       "host":"localhost",
       "port":"27017"
     },
+    "payu":{
 
+      "merchant_id":5254394,
+      "merchant_key":"qWfBea",
+      "merchant_salt":"z16BIBvi"
+    },
+    "neo":{
+
+      "server":"localhost",
+      "port":"7474",
+      "user":"pricepls",
+      "password":"hackerboy"
+    },
     "port":"3000"
 
   },
@@ -31,6 +43,14 @@
 
       "host":"localhost",
       "port":"27017"
+    },
+    "neo":{
+
+      "server":"54.255.196.214",
+      "port":"7474",
+      "user":"neo",
+      "password":"aJAORbpsUj4r"
+
     },
     "port":"3000"
 

@@ -8,6 +8,7 @@ var constants=app.get('constants');
 var mysqlDB=require('../lib/mysqldb')();
 var mongo=require('../lib/mongodb');
 var gcm = require('../lib/gcm');
+var neo4j = require('../lib/neo');
 var moment=require('moment');
 
 mysqlDB.init();
@@ -143,6 +144,8 @@ var vendor={
           "FORCE_UPGRADE":false,
           "SHOW_UPDATE_MESSAGE":true
         };
+
+        console.log(neo4j);
 
         var listing_id = req.body.listing_id || undefined;
 
