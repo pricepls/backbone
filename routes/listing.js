@@ -4,7 +4,7 @@ var constants=app.get('constants');
 var mysqlDB=require('../lib/mysqldb')();
 var mongo=require('../lib/mongodb');
 
-
+mysqlDB.init();
 
 var listing = {
 
@@ -25,24 +25,103 @@ var listing = {
             res.json(response);
         } else {
 
-            var query = {
-                vendor_id: parseInt(vendor_id)
-            }
+            var config = {
+                "LISTING":{},
+                "CATEGORIES":[],
+                "SUB_TYPES":[],
+                "AMENITIES":[],
+                "LATEST_VERSION":1,
+                "FORCE_UPGRADE":false,
+                "SHOW_UPDATE_MESSAGE":false,
+                "SHOW_LIST_BUSINESS":false
+            };
 
-            mongo.getVendorListing(query, function (err, listingData) {
 
-                if (err)
-                    next(err);
-                else {
+            var listing_id = req.body.listing_id || undefined;
 
-                    response.statusCode = 200;
-                    response.status = "success";
-                    response.data = listingData || {};
-                    res.json(response);
+            async.parallel([
+
+
+                function(callback){
+
+                    mysqlDB.getAllCategories(function(err,categories){
+                        if(err)
+                            return callback(err)
+                        else{
+                            config.CATEGORIES = categories;
+                            callback();
+                        }
+                    })
+
+                },
+                function(callback){
+
+                    mysqlDB.getAllAmenities(function(err,amenities){
+
+                        if(err)
+                            return callback(err);
+                        else {
+                            config.AMENITIES = amenities;
+                            callback();
+
+                        }
+                    });
+
+
+                },
+                function(callback){
+
+                    mysqlDB.getAllSubtypes(function(err,subtypes){
+
+                        if(err)
+                            return callback(err);
+                        else {
+                            config.SUB_TYPES = subtypes;
+                            callback();
+                        }
+
+                    });
+
+                }
+                ,
+                function(callback){
+
+                    var query = {
+                        vendor_id: parseInt(vendor_id)
+                    }
+                    mongo.getVendorListing(query, function (err, listingData) {
+                        if (err)
+                            next(err);
+                        else {
+                            if(listingData !==null){
+                                config.LISTING = listingData;
+                            }else{
+                                config.LISTING ={};
+                                config.SHOW_LIST_BUSINESS = true;
+                            }
+                            callback();
+                        }
+                    });
+
 
                 }
 
+
+            ],function(err){
+
+                if(err)
+                    next(err);
+
+                response.statusCode = 200;
+                response.status = "success";
+                response.data=config;
+                res.json(response);
+
             });
+
+
+
+
         }
 
     },

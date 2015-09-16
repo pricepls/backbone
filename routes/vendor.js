@@ -8,7 +8,7 @@ var constants=app.get('constants');
 var mysqlDB=require('../lib/mysqldb')();
 var mongo=require('../lib/mongodb');
 var gcm = require('../lib/gcm');
-var neo4j = require('../lib/neo');
+//var neo4j = require('../lib/neo');
 var moment=require('moment');
 
 mysqlDB.init();
@@ -135,84 +135,7 @@ var vendor={
 
     config : function(req,res,next){
 
-        var config = {
-          "LISTING":{},
-          "CATEGORIES":[],
-          "SUB_TYPES":[],
-          "AMENITIES":[],
-          "LATEST_VERSION":1,
-          "FORCE_UPGRADE":false,
-          "SHOW_UPDATE_MESSAGE":true
-        };
 
-        console.log(neo4j);
-
-        var listing_id = req.body.listing_id || undefined;
-
-        async.parallel([
-
-
-            function(callback){
-
-                mysqlDB.getAllCategories(function(err,categories){
-                    if(err)
-                        return callback(err)
-                    else{
-                        config.CATEGORIES = categories;
-                        callback();
-                    }
-                })
-
-            },
-            function(callback){
-
-                mysqlDB.getAllAmenities(function(err,amenities){
-
-                    if(err)
-                        return callback(err);
-                    else {
-                        config.AMENITIES = amenities;
-                        callback();
-
-                    }
-                });
-
-
-            },
-            function(callback){
-
-                mysqlDB.getAllSubtypes(function(err,subtypes){
-
-                    if(err)
-                        return callback(err);
-                    else {
-                        config.SUB_TYPES = subtypes;
-                        callback();
-                    }
-
-                });
-
-            }
-            //,
-            //function(callback){
-            //
-            //    if(listing_id !== undefined){
-            //
-            //        callback
-            //
-            //    }else
-            //        callback();
-            //
-            //}
-
-
-        ],function(err){
-
-            if(err)
-                next(err);
-            res.json(config);
-
-        });
     },
     addGCMToken : function(req,res,next){
 
