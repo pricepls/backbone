@@ -3,6 +3,10 @@ var async=require('async');
 var constants=app.get('constants');
 var mysqlDB=require('../lib/mysqldb')();
 var mongo=require('../lib/mongodb');
+var request = require('../lib/request');
+var shortid= require('shortid');
+shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
+var configs = app.get('configs');
 
 mysqlDB.init();
 
@@ -214,7 +218,185 @@ var listing = {
         });
 
 
+    },
+    newListing : function(req,res,next){
+
+        var response = {
+            status:""
+        }
+        var category_id = parseInt(req.body.category_id) || undefined;
+        var category = req.body.category || undefined;
+        var subtype_id = parseInt(req.body.subtype_id) || undefined;
+        var subtype=req.body.subtype || undefined;
+        var lat = req.body.lat || undefined;
+        var long = req.body.long || undefined;
+        if(category_id === 1){
+
+            var checkin = req.body.checkin || undefined;
+            var checkout = req.body.checkout || undefined;
+            var starrating = req.body.star || undefined;
+            var rooms = req.body.rooms || undefined;
+            rooms = JSON.parse(rooms);
+            var list_rooms = [];
+            var keys = Object.keys(rooms), len = keys.length;
+            for(var i = 0 ; i < len ; i++){
+                var each_room= {};
+                each_room.room_type= keys[i];
+                each_room.price = rooms[keys[i]];
+                list_rooms.push(each_room);
+            }
+            var amenities = req.body.amenities || undefined;
+
+
+        }else if (category === 2){
+
+
+        }
+        var city_id = undefined;
+        var city = undefined;
+        var country_id = undefined;
+        var state_id = undefined;
+        var country = undefined;
+        var country_short = undefined;
+        var state = undefined;
+        var state_short = undefined;
+        var vendor_id = req.body.vendor || undefined;
+        var current_time = new Date().getTime().toString();
+        var listing_id ="PPL_"+shortid.generate();
+        var vendor_obj = {};
+        var location = req.body.location || undefined;
+
+        async.series([
+
+            //function(callback){
+            //
+            //    var geocode_url = configs.google.geocode_url;
+            //    var geocode_key = configs.google.geocode_key;
+            //    var qs = "latlng="+lat+","+long+"&key="+geocode_key;
+            //    var final_url = geocode_url+qs;
+            //    request.makeSimpleGetRequest(final_url,function(err,data){
+            //
+            //        if(!err){
+            //            var result = JSON.parse(data).results;
+            //            if(result.length > 0){
+            //                var first_component = result[2];
+            //                var address_components = first_component.address_components;
+            //                area = address_components[0].long_name;
+            //                city = address_components[1].long_name;
+            //                state = address_components[3].long_name;
+            //                state_short = address_components[3].short_name;
+            //                country = address_components[4].long_name;
+            //                country_short = address_components[4].short_name;
+            //                mysqlDB.newCounty(country,country_short,function(err,id){
+            //                    if(!err)
+            //                        country_id= id;
+            //                    mysqlDB.newState(state,state_short,country_id,function(err,id){
+            //                        if(!err)
+            //                            state_id= id;
+            //                        mysqlDB.newCity(city,country_id,state_id,function(err,id){
+            //                            if(!err)
+            //                                city_id=id;
+            //                            callback();
+            //                        });
+            //                    });
+            //                });
+            //
+            //            }
+            //        }
+            //    });
+            //},
+            function(callback){
+
+                location_split = location.split(',');
+                area = location_split[0];
+                city = location_split[1]
+                state = location_split[2]
+                state_short = state.substr(0,2);
+                country = location_split[3]
+                country_short =country.substr(0,2);
+                mysqlDB.newCounty(country,country_short,function(err,id){
+                    if(!err)
+                        country_id= id;
+                    mysqlDB.newState(state,state_short,country_id,function(err,id){
+                        if(!err)
+                            state_id= id;
+                        mysqlDB.newCity(city,country_id,state_id,function(err,id){
+                            if(!err)
+                                city_id=id;
+                            callback();
+                        });
+                    });
+                });
+
+            },
+            function(callback){
+
+                mysqlDB.findVendorById(vendor_id,function(err,vendor){
+
+                    if(err)
+                        return callback(err);
+                    if(vendor !== undefined){
+
+                        vendor_obj.name = vendor.name;
+                        vendor_obj.phone = parseInt(vendor.phone);
+                        vendor_obj.contact_no = parseInt(vendor.contact_no);
+                    }
+                    callback();
+                });
+            },
+            function(callback){
+
+                var query={
+                    "listing_id":listing_id,
+                    "area":area,
+                    "city_id":city_id,
+                    "city":city,
+                    "state":state,
+                    "country":country,
+                    "latitude":lat,
+                    "longitude":long,
+                    "amenities":amenities,
+                    "vendor_id":vendor_id,
+                    "vendor_details":vendor_obj,
+                    "category_id":category_id,
+                    "category":category,
+                    "subcategory":subtype,
+                    "subcategory_id":subtype_id,
+                    "check_in":checkin,
+                    "check_out":checkout,
+                    "star_rating":starrating,
+                    "created_at": current_time,
+                    "modified_at": current_time,
+                    "room_types":list_rooms,
+                    "status":"active"
+                }
+                mongo.createListing(query,function(err,success){
+
+                    if(err)
+                        return callback(err);
+                    else{
+                        callback();
+                    }
+                });
+
+            }
+
+        ],function(err){
+
+            if(err)
+                next(err);
+            else{
+
+                response.status ="success";
+                response.message = constants.messages['3004'];
+                response.listing_id = listing_id;
+                res.json(response);
+            }
+        })
+
+
     }
+
 }
 
 module.exports = listing;

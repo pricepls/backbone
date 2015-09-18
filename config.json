@@ -27,7 +27,13 @@
       "user":"pricepls",
       "password":"hackerboy"
     },
-    "port":"3000"
+    "port":"3000",
+    "google":{
+
+      "geocode_url":"https://maps.googleapis.com/maps/api/geocode/json?",
+      "geocode_key":"AIzaSyCRh2PtkWrE3Dnbj0I7-KI-ELgjRGjd3kw"
+
+    }
 
   },
   "production":{
@@ -50,6 +56,12 @@
       "port":"7474",
       "user":"neo",
       "password":"aJAORbpsUj4r"
+
+    },
+    "google":{
+
+      "geocode_url":"https://maps.googleapis.com/maps/api/geocode/json?",
+      "geocode_key":"AIzaSyCRh2PtkWrE3Dnbj0I7-KI-ELgjRGjd3kw"
 
     },
     "port":"3000"

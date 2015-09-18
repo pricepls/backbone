@@ -3,6 +3,7 @@ var async=require('async');
 var constants=app.get('constants');
 var mysqlDB=require('../lib/mysqldb')();
 var mongo=require('../lib/mongodb');
+var configs = app.get('configs');
 
 
 var request = {

@@ -20,7 +20,8 @@ router.post('/vendor/forgot-password',vendor.forgotPassword);
 router.post('/vendor/change-password',vendor.changePassword);
 
 
-router.post('/vendor/listing/new',listing.createListing);
+//router.post('/vendor/listing/new',listing.createListing);
+router.post('/vendor/listing/new',listing.newListing);
 router.get('/vendor/listing/getlisting',listing.getListingDetails);
 
 
