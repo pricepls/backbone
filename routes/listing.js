@@ -7,6 +7,7 @@ var request = require('../lib/request');
 var shortid= require('shortid');
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
 var configs = app.get('configs');
+var utils = require('../lib/util');
 
 mysqlDB.init();
 
@@ -368,6 +369,7 @@ var listing = {
                     "created_at": current_time,
                     "modified_at": current_time,
                     "room_types":list_rooms,
+                    "images":[],
                     "status":"active"
                 }
                 mongo.createListing(query,function(err,success){
@@ -394,6 +396,76 @@ var listing = {
             }
         })
 
+
+    },
+    newImage : function(req,res,next){
+
+        var listing_id = req.body.listing_id || undefined;
+        var images = {};
+        var response = {
+            status:""
+        };
+        async.series([
+
+            function(callback){
+
+                var image_path =req.file.path;
+                var public_id = 'listings/'+listing_id+'/image_'+ req.file.originalname;
+                utils.uploadTocloudanary(image_path,public_id,function(imagerslt){
+
+                    if(imagerslt){
+
+                         images.name=shortid.generate();
+                         images.url=imagerslt.url;
+                         var fs = require('fs');
+                         fs.unlinkSync(image_path);
+
+                        callback();
+                    }
+                });
+            },
+            function(callback){
+
+                mongo.updateImage(images,listing_id,function(err,status){
+                    if(err)
+                        return callback(err);
+                    callback();
+
+                });
+            }
+
+        ],function(err){
+
+            if(!err){
+                response.status="success";
+                response.message=constants.messages['3005'];
+                response.data = images.name;
+                res.json(response);
+            }
+
+        });
+    }
+    ,
+    deleteImage : function(req,res,next){
+
+        var listing_id = req.body.listing_id || undefined;
+        var image_id = req.body.image_id || undefined;
+        var response = {
+            status : ""
+        }
+
+        mongo.deleteImage(image_id,listing_id,function(err,status){
+
+            if(err)
+                next(err);
+            else{
+
+                response.status="success";
+                response.message=constants.messages['3006'];
+                res.json(response);
+            }
+
+        });
 
     }
 

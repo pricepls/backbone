@@ -24,7 +24,9 @@
     "3001":"Price quoted successfully",
     "3002":"We have sent your new password",
     "3003":"Password update successfully",
-    "3004":"Listing created successfully"
+    "3004":"Listing created successfully",
+    "3005":"Image uploaded successfully",
+    "3006":"Image deleted successfully"
 
   }
 

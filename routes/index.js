@@ -5,6 +5,9 @@ var vendor=require('./vendor.js');
 var listing = require('./listing.js');
 var request = require('./request.js');
 var booking  = require('./booking.js');
+var multer  = require('multer');
+var upload = multer({ dest: './uploads/' });
+
 //var payment = require('./payment.js');
 
 /* all vendor related routes */
@@ -23,6 +26,9 @@ router.post('/vendor/change-password',vendor.changePassword);
 //router.post('/vendor/listing/new',listing.createListing);
 router.post('/vendor/listing/new',listing.newListing);
 router.get('/vendor/listing/getlisting',listing.getListingDetails);
+router.post('/vendor/listing/newimage',upload.single('thumbnail'),listing.newImage);
+router.post('/vendor/listing/deleteimage',listing.deleteImage);
+
 
 
 
