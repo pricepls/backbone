@@ -338,8 +338,8 @@ var listing = {
                     if(vendor !== undefined){
 
                         vendor_obj.name = vendor.name;
-                        vendor_obj.phone = parseInt(vendor.phone);
-                        vendor_obj.contact_no = parseInt(vendor.contact_no);
+                        vendor_obj.phone = vendor.phone.toString();
+                        vendor_obj.contact_no = vendor.contact_no.toString();
                     }
                     callback();
                 });
