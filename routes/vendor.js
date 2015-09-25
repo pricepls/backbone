@@ -49,7 +49,7 @@ var vendor={
 
                                 if(listingid !== null){
                                     vendor.listing_id = listingid;
-                                    util.checkGraphNodeExits(vendor.id,listingid);
+                                    //util.checkGraphNodeExits(vendor.id,listingid);
                                 }else
                                     vendor.listing_id=null;
 

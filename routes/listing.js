@@ -392,7 +392,7 @@ var listing = {
                     "vendor_id":parseInt(vendor_id),
                     "vendor_details":vendor_obj,
                     "category_id":category_id,
-                    "category":category,    
+                    "category":category,
                     "subcategory":subtype,
                     "subcategory_id":subtype_id,
                     "check_in":checkin,
