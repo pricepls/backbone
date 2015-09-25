@@ -535,7 +535,7 @@ var listing = {
                        response.status='error';
                        response.error_code=2016;
                        response.error_msg=constants.messages['2016'];
-                       response.json(response);
+                       res.json(response);
 
                    }
 
@@ -546,7 +546,7 @@ var listing = {
             response.status='error';
             response.error_code=2016;
             response.error_msg=constants.messages['2016'];
-            response.json(response);
+            res.json(response);
         }
     }
 
