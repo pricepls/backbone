@@ -266,6 +266,7 @@ var listing = {
         var listing_id ="PPL_"+shortid.generate();
         var vendor_obj = {};
         var location = req.body.location || undefined;
+        var area = undefined;
 
         async.series([
 
@@ -308,26 +309,57 @@ var listing = {
             //},
             function(callback){
 
-                location_split = location.split(',');
-                area = location_split[0];
-                city = location_split[1]
-                state = location_split[2]
-                state_short = state.substr(0,2);
-                country = location_split[3]
-                country_short =country.substr(0,2);
-                mysqlDB.newCounty(country,country_short,function(err,id){
-                    if(!err)
-                        country_id= id;
-                    mysqlDB.newState(state,state_short,country_id,function(err,id){
-                        if(!err)
-                            state_id= id;
-                        mysqlDB.newCity(city,country_id,state_id,function(err,id){
-                            if(!err)
-                                city_id=id;
-                            callback();
-                        });
+                if(location !== undefined) {
+                    location_split = location.split(',');
+                    area = location_split[0];
+                    city = location_split[1]
+                    state = location_split[2]
+                    state_short = state.substr(0, 2);
+                    country = location_split[3]
+                    country_short = country.substr(0, 2);
+                }else{
+
+                    var geocode_url = configs.google.geocode_url;
+                    var geocode_key = configs.google.geocode_key;
+                    var qs = "latlng="+lat+","+long+"&key="+geocode_key;
+                    var final_url = geocode_url+qs;
+                    request.makeSimpleGetRequest(final_url,function(err,data){
+
+                        if(!err){
+                            var result = JSON.parse(data).results;
+                            if(result.length > 0){
+
+                                var first_component = result[1];
+                                var address_components = first_component.formatted_address;
+                                var address_split=address_components.split(',');
+                                var address_length = address_split.length-1;
+                                country = address_split[address_length].trim();
+                                country_short = country.substr(0, 3);
+                                var state_with_pin = address_split[address_length-1].trim();
+                                var state_with_pin_split = state_with_pin.split(' ');
+                                state=state_with_pin_split[0];
+                                state_short = state.substr(0, 3);
+                                city = address_split[address_length-2].trim();
+                                area = address_split[address_length-3].trim();
+                                mysqlDB.newCounty(country,country_short,function(err,id){
+                                    if(!err)
+                                        country_id= id;
+                                    mysqlDB.newState(state,state_short,country_id,function(err,id){
+                                        if(!err)
+                                            state_id= id;
+                                        mysqlDB.newCity(city,country_id,state_id,function(err,id){
+                                            if(!err)
+                                                city_id=id;
+                                            callback();
+                                        });
+                                    });
+                                });
+
+                            }
+                        }
                     });
-                });
+                }
+
 
             },
             function(callback){
@@ -467,6 +499,55 @@ var listing = {
 
         });
 
+    },
+    removeListing : function(req,res,next){
+
+        var listing_id = req.body.listing_id || undefined;
+        var vendor_id = req.body.vendor || undefined;
+        var response = {
+            status : ''
+        }
+        if(listing_id !== undefined  && vendor_id !== undefined){
+
+            mongo.checkListingMatches(listing_id,vendor_id,function(err,status){
+
+               if(err)
+                    next(err);
+               else{
+                   if(status){
+
+                       mongo.removeListing(listing_id,vendor_id,function(err,status){
+
+                           if(err){
+                                next(err);
+                           }else{
+
+                               response.status='success';
+                               response.message=constants.messages['3007'];
+                               res.json(response);
+
+                           }
+                       });
+
+
+                   }else{
+
+                       response.status='error';
+                       response.error_code=2016;
+                       response.error_msg=constants.messages['2016'];
+                       response.json(response);
+
+                   }
+
+               }
+            });
+
+        }else {
+            response.status='error';
+            response.error_code=2016;
+            response.error_msg=constants.messages['2016'];
+            response.json(response);
+        }
     }
 
 }

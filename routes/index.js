@@ -28,8 +28,7 @@ router.post('/vendor/listing/new',listing.newListing);
 router.get('/vendor/listing/getlisting',listing.getListingDetails);
 router.post('/vendor/listing/newimage',upload.single('thumbnail'),listing.newImage);
 router.post('/vendor/listing/deleteimage',listing.deleteImage);
-
-
+router.post('/vendor/listing/removelisting',listing.removeListing);
 
 
 router.get('/vendor/new-requests',request.getNewrequests);
