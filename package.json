@@ -24,7 +24,8 @@
     "node-neo4j":"2.0.3",
     "request":"2.60.0",
     "multer":"1.0.1",
-    "cloudinary":"1.2.2"
+    "cloudinary":"1.2.2",
+    "neo4j":"2.0.0-RC2"
 
   },
   "private":true

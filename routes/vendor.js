@@ -43,7 +43,7 @@ var vendor={
                         mongo.getListingId(vendor.id,function(err,listingid){
 
                             if(err)
-                                callback(err);
+                                next(err);
                             else{
 
                                 if(listingid !== null){
