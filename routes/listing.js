@@ -509,6 +509,7 @@ var listing = {
         }
         if(listing_id !== undefined  && vendor_id !== undefined){
 
+            vendor_id=parseInt(vendor_id);
             mongo.checkListingMatches(listing_id,vendor_id,function(err,status){
 
                if(err)
