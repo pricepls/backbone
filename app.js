@@ -1,4 +1,5 @@
-require('newrelic');
+if(process.env.ENVIORNMENT!='development')
+    require('newrelic');
 var express=require('express'),
     bodyParser=require('body-parser'),
     logger=require('morgan');
@@ -31,7 +32,6 @@ if(app.get('env')=='development'){
 
 }
 // setting the config to make it available everywhere
-
 app.set('configs',configs);
 
 // loading constants

@@ -8,7 +8,7 @@ var constants=app.get('constants');
 var mysqlDB=require('../lib/mysqldb')();
 var mongo=require('../lib/mongodb');
 var gcm = require('../lib/gcm');
-//var neo4j = require('../lib/neo');
+var neo4j = require('../lib/neo');
 var moment=require('moment');
 
 mysqlDB.init();
@@ -40,6 +40,7 @@ var vendor={
                 else{
                     if(vendor!==undefined){
 
+
                         mongo.getListingId(vendor.id,function(err,listingid){
 
                             if(err)
@@ -48,6 +49,7 @@ var vendor={
 
                                 if(listingid !== null){
                                     vendor.listing_id = listingid;
+                                    util.checkGraphNodeExits(vendor.id,listingid);
                                 }else
                                     vendor.listing_id=null;
 
@@ -135,6 +137,7 @@ var vendor={
 
     config : function(req,res,next){
 
+        neo4j.sample();
 
     },
     addGCMToken : function(req,res,next){

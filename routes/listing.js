@@ -389,10 +389,10 @@ var listing = {
                     "latitude":lat,
                     "longitude":long,
                     "amenities":amenities,
-                    "vendor_id":vendor_id,
+                    "vendor_id":parseInt(vendor_id),
                     "vendor_details":vendor_obj,
                     "category_id":category_id,
-                    "category":category,
+                    "category":category,    
                     "subcategory":subtype,
                     "subcategory_id":subtype_id,
                     "check_in":checkin,
@@ -503,7 +503,7 @@ var listing = {
     removeListing : function(req,res,next){
 
         var listing_id = req.body.listing_id || undefined;
-        var vendor_id = req.body.vendor || undefined;
+        var vendor_id = req.body.vendor_id || undefined;
         var response = {
             status : ''
         }

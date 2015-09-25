@@ -24,8 +24,8 @@
 
       "server":"localhost",
       "port":"7474",
-      "user":"pricepls",
-      "password":"hackerboy"
+      "user":"neo4j",
+      "password":"root"
     },
     "port":"3000",
     "google":{
