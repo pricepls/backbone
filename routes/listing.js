@@ -471,7 +471,7 @@ var listing = {
             if(!err){
                 response.status="success";
                 response.message=constants.messages['3005'];
-                response.data = {name:images.name,url:images.url};
+                response.data = images;
                 res.json(response);
             }
 
@@ -498,6 +498,37 @@ var listing = {
             }
 
         });
+
+    },
+    deleteMultiImages : function(req,res,next){
+
+        var listing_id = req.body.listing_id || undefined;
+        var image_ids = req.body.image_ids || undefined;
+        var response = {
+            status : ""
+        }
+        if(image_ids.length >0 ){
+
+            forEach(image_ids,function(image_id,callback){
+
+                mongo.deleteImage(image_id,listing_id,function(err,status){
+
+                    if(err)
+                       return callback(err);
+                    else{
+
+                        callback();
+                    }
+
+                });
+
+            },function(err){
+
+                response.status="success";
+                response.message=constants.messages['3006'];
+                res.json(response);
+            })
+        }
 
     },
     removeListing : function(req,res,next){
