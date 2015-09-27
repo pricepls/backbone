@@ -507,9 +507,10 @@ var listing = {
         var response = {
             status : ""
         }
+        image_ids=image_ids.split(',');
         if(image_ids.length >0 ){
 
-            forEach(image_ids,function(image_id,callback){
+            async.forEach(image_ids,function(image_id,callback){
 
                 mongo.deleteImage(image_id,listing_id,function(err,status){
 
