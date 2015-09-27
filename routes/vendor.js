@@ -137,7 +137,10 @@ var vendor={
 
     config : function(req,res,next){
 
-        neo4j.sample();
+        neo4j.createNode({name:'adarsh',vendor_id:1},function(err,node){
+
+            console.log(node._id);
+        });
 
     },
     addGCMToken : function(req,res,next){

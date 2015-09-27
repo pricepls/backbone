@@ -471,7 +471,7 @@ var listing = {
             if(!err){
                 response.status="success";
                 response.message=constants.messages['3005'];
-                response.data = images.name;
+                response.data = {name:images.name,url:images.url};
                 res.json(response);
             }
 
