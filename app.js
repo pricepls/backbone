@@ -20,7 +20,7 @@ var configFile=require('./config.json');
 var configs;
 
 // reading config based on env
-if(app.get('env')=='development'){
+if(process.env.ENVIORNMENT =='development'){
 
     app.use(logger('short'));
     configs=configFile.development;
@@ -32,6 +32,7 @@ if(app.get('env')=='development'){
 
 }
 // setting the config to make it available everywhere
+console.log(configs);
 app.set('configs',configs);
 
 // loading constants
