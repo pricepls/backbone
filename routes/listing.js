@@ -310,15 +310,15 @@ var listing = {
             //},
             function(callback){
 
-                if(location !== undefined) {
-                    location_split = location.split(',');
-                    area = location_split[0];
-                    city = location_split[1]
-                    state = location_split[2]
-                    state_short = state.substr(0, 2);
-                    country = location_split[3]
-                    country_short = country.substr(0, 2);
-                }else{
+                //if(location !== undefined) {
+                //    location_split = location.split(',');
+                //    area = location_split[0];
+                //    city = location_split[1]
+                //    state = location_split[2]
+                //    state_short = state.substr(0, 2);
+                //    country = location_split[3]
+                //    country_short = country.substr(0, 2);
+                //}else{
 
                     var geocode_url = configs.google.geocode_url;
                     var geocode_key = configs.google.geocode_key;
@@ -359,7 +359,7 @@ var listing = {
                             }
                         }
                     });
-                }
+                //}
 
 
             },
