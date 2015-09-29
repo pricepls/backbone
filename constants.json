@@ -30,6 +30,14 @@
     "3006":"Image deleted successfully",
     "3007":"Listing removed successfully"
 
+  },
+  "graph_labels":{
+
+    "listing_label":"listing",
+    "user_label":"user",
+    "request_label":"request",
+    "city_label":"city"
+
   }
 
 }

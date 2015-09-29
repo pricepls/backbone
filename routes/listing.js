@@ -8,6 +8,7 @@ var shortid= require('shortid');
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
 var configs = app.get('configs');
 var utils = require('../lib/util');
+var neo4j = require('../lib/neo');
 
 mysqlDB.init();
 
@@ -222,6 +223,7 @@ var listing = {
     },
     newListing : function(req,res,next){
 
+        console.log(req);
         var response = {
             status:""
         }
@@ -270,43 +272,6 @@ var listing = {
 
         async.series([
 
-            //function(callback){
-            //
-            //    var geocode_url = configs.google.geocode_url;
-            //    var geocode_key = configs.google.geocode_key;
-            //    var qs = "latlng="+lat+","+long+"&key="+geocode_key;
-            //    var final_url = geocode_url+qs;
-            //    request.makeSimpleGetRequest(final_url,function(err,data){
-            //
-            //        if(!err){
-            //            var result = JSON.parse(data).results;
-            //            if(result.length > 0){
-            //                var first_component = result[2];
-            //                var address_components = first_component.address_components;
-            //                area = address_components[0].long_name;
-            //                city = address_components[1].long_name;
-            //                state = address_components[3].long_name;
-            //                state_short = address_components[3].short_name;
-            //                country = address_components[4].long_name;
-            //                country_short = address_components[4].short_name;
-            //                mysqlDB.newCounty(country,country_short,function(err,id){
-            //                    if(!err)
-            //                        country_id= id;
-            //                    mysqlDB.newState(state,state_short,country_id,function(err,id){
-            //                        if(!err)
-            //                            state_id= id;
-            //                        mysqlDB.newCity(city,country_id,state_id,function(err,id){
-            //                            if(!err)
-            //                                city_id=id;
-            //                            callback();
-            //                        });
-            //                    });
-            //                });
-            //
-            //            }
-            //        }
-            //    });
-            //},
             function(callback){
 
                 if(location !== undefined) {
@@ -413,6 +378,35 @@ var listing = {
                     }
                 });
 
+
+            },
+            function(callback){
+
+                var listing_to_graph = {
+                    'listing_id':listing_id,
+                    'category_id':category_id,
+                    'vendor_id':vendor_id,
+                    'subcategory_id':subtype_id,
+                    'star_rating':starrating
+                };
+                var node_label = ''
+
+                neo4j.createNode(listing_to_graph,function(err,node){
+
+                    if(err)
+                        return callback(err);
+                    else {
+                        mongo.updateListingGraphNodeID(listing_to_graph, node._id, function (err, status) {
+
+                            if(err)
+                                return callback(err);
+                            else
+                                callback();
+                        })
+
+                    }
+
+                });
             }
 
         ],function(err){
@@ -471,7 +465,7 @@ var listing = {
             if(!err){
                 response.status="success";
                 response.message=constants.messages['3005'];
-                response.data = {name:images.name,url:images.url};
+                response.data = images;
                 res.json(response);
             }
 
@@ -498,6 +492,38 @@ var listing = {
             }
 
         });
+
+    },
+    deleteMultiImages : function(req,res,next){
+
+        var listing_id = req.body.listing_id || undefined;
+        var image_ids = req.body.image_ids || undefined;
+        var response = {
+            status : ""
+        }
+        image_ids=image_ids.split(',');
+        if(image_ids.length >0 ){
+
+            async.forEach(image_ids,function(image_id,callback){
+
+                mongo.deleteImage(image_id,listing_id,function(err,status){
+
+                    if(err)
+                       return callback(err);
+                    else{
+
+                        callback();
+                    }
+
+                });
+
+            },function(err){
+
+                response.status="success";
+                response.message=constants.messages['3006'];
+                res.json(response);
+            })
+        }
 
     },
     removeListing : function(req,res,next){
