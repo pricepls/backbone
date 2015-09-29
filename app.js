@@ -32,7 +32,6 @@ if(process.env.ENVIORNMENT =='development'){
 
 }
 // setting the config to make it available everywhere
-console.log(configs);
 app.set('configs',configs);
 
 // loading constants

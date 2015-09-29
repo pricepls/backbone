@@ -222,6 +222,7 @@ var listing = {
     },
     newListing : function(req,res,next){
 
+        console.log(req);
         var response = {
             status:""
         }
