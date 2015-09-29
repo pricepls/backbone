@@ -41,14 +41,15 @@ var vendor={
                     if(vendor!==undefined){
 
 
-                        mongo.getListingId(vendor.id,function(err,listingid){
+                        mongo.getListingId(vendor.id,function(err,listing){
 
                             if(err)
                                 next(err);
                             else{
 
-                                if(listingid !== null){
-                                    vendor.listing_id = listingid;
+                                if(listing !== null){
+                                    vendor.listing_id = listing.listing_id;
+                                    vendor.room_types = listing.room_types;
                                     //util.checkGraphNodeExits(vendor.id,listingid);
                                 }else
                                     vendor.listing_id=null;
