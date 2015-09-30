@@ -223,7 +223,6 @@ var listing = {
     },
     newListing : function(req,res,next){
 
-        console.log(req);
         var response = {
             status:""
         }
@@ -274,15 +273,15 @@ var listing = {
 
             function(callback){
 
-                if(location !== undefined) {
-                    location_split = location.split(',');
-                    area = location_split[0];
-                    city = location_split[1]
-                    state = location_split[2]
-                    state_short = state.substr(0, 2);
-                    country = location_split[3]
-                    country_short = country.substr(0, 2);
-                }else{
+                //if(location !== undefined) {
+                //    location_split = location.split(',');
+                //    area = location_split[0];
+                //    city = location_split[1]
+                //    state = location_split[2]
+                //    state_short = state.substr(0, 2);
+                //    country = location_split[3]
+                //    country_short = country.substr(0, 2);
+                //}else{
 
                     var geocode_url = configs.google.geocode_url;
                     var geocode_key = configs.google.geocode_key;
@@ -323,7 +322,7 @@ var listing = {
                             }
                         }
                     });
-                }
+                //}
 
 
             },
@@ -389,21 +388,20 @@ var listing = {
                     'subcategory_id':subtype_id,
                     'star_rating':starrating
                 };
-                var node_label = ''
+                var node_label = constants.graph_labels.listing_label;
 
-                neo4j.createNode(listing_to_graph,function(err,node){
+                neo4j.createNode(listing_to_graph,node_label,function(err,node){
 
                     if(err)
                         return callback(err);
                     else {
-                        mongo.updateListingGraphNodeID(listing_to_graph, node._id, function (err, status) {
+                        mongo.updateListingGraphNodeID(listing_id, node._id, function (err, status) {
 
                             if(err)
                                 return callback(err);
                             else
                                 callback();
-                        })
-
+                        });
                     }
 
                 });
@@ -541,8 +539,9 @@ var listing = {
                if(err)
                     next(err);
                else{
-                   if(status){
+                   if(status.exists){
 
+                       neo4j.removeNode(status.graphnode_id);
                        mongo.removeListing(listing_id,vendor_id,function(err,status){
 
                            if(err){
