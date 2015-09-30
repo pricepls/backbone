@@ -63,6 +63,7 @@ var request = {
                             response.statusCode=200;
                             response.status="success";
                             response.data= requests_obj;
+                            response.force_update=false;
                             res.json(response);
 
                         });
