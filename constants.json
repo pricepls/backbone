@@ -22,13 +22,15 @@
     "2015":"You old password is not correct",
     "2016":"Vendor and listing details are not available",
     "2016":"No booking for you",
+    "2017":"Please provide all neccessary filed",
     "3001":"Price quoted successfully",
     "3002":"We have sent your new password",
     "3003":"Password update successfully",
     "3004":"Listing created successfully",
     "3005":"Image uploaded successfully",
     "3006":"Image deleted successfully",
-    "3007":"Listing removed successfully"
+    "3007":"Listing removed successfully",
+    "3008":"Recharge request received we will notify you once its success"
 
   }
 

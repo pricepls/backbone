@@ -5,10 +5,11 @@ var vendor=require('./vendor.js');
 var listing = require('./listing.js');
 var request = require('./request.js');
 var booking  = require('./booking.js');
+var payment = require('./payments.js');
 var multer  = require('multer');
 var upload = multer({ dest: './uploads/' });
 
-//var payment = require('./payment.js');
+//var payment = require('./payments.js');
 
 /* all vendor related routes */
 
@@ -38,7 +39,8 @@ router.get('/vendor/getrequest',request.getRequestDetails);
 
 
 router.post('/vendor/new-price',request.newPrice);
-//router.post('/vendor/init-recharge',payment.initRecharge);
+router.post('/vendor/init-recharge',payment.initRecharge);
+
 
 
 router.get('/vendor/confimed-bookings',booking.confirmedBookings);
