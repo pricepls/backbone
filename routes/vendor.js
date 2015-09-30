@@ -279,7 +279,8 @@ var vendor={
                         amount : 400,
                         credit : 420
                     }
-                ]
+                ],
+                booking_balance:1000
 
             }
             response.status="success";
