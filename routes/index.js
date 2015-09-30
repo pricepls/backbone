@@ -15,6 +15,7 @@ var upload = multer({ dest: './uploads/' });
 
 
 router.get('/vendor/config',vendor.config);
+router.get('/vendor/checkaccountactive',vendor.checkAccountActive);
 router.post('/vendor/login',vendor.login);
 router.post('/vendor/addgcmtoken',vendor.addGCMToken);
 router.post('/vendor/new',vendor.createVendor);

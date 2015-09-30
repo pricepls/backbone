@@ -388,6 +388,42 @@ var vendor={
             response.error_msg = constants.messages['2014'];
             res.json(response);
         }
+    },
+    checkAccountActive :function(req,res,next){
+
+        var vendor_id = req.query.vendor_id || undefined;
+        var response = { status:'' };
+        if(vendor_id === undefined){
+
+            response.status='failed';
+            response.error_code=2018;
+            response.error_msg=constants.messages['2018'];
+            res.json(response);
+        }else{
+
+            mysqlDB.checkAccountActive(vendor_id,function(err,status){
+
+                if(err)
+                    next(err);
+                else{
+
+                    var status_obj={};
+                    if(status){
+                        status_obj.avctive=true;
+                        status_obj.force_update=false;
+                    }else{
+                        status_obj.avctive=false;
+                        status_obj.force_update=false;
+                    }
+                    response.status='success';
+                    response.data = status_obj;
+                    res.json(response);
+                }
+            })
+
+
+
+        }
     }
 }
 
