@@ -117,7 +117,6 @@ var request = {
                 no_of_guests:1,
                 no_of_nights:1,
                 user_details:1,
-                type:1
 
 
             }
@@ -197,6 +196,7 @@ var request = {
                         var notified_vendors = requestData.notified_vendors[0];
                         if(notified_vendors.pp_price){
                             requestData.pp_price = notified_vendors.pp_price;
+                            requestData.type=notified_vendors.type;
                         }
                         delete requestData.notified_vendors;
                         response.data = requestData;
