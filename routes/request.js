@@ -116,7 +116,9 @@ var request = {
                 created_date:1,
                 no_of_guests:1,
                 no_of_nights:1,
-                user_details:1
+                user_details:1,
+                type:1
+
 
             }
             mongo.getRepliedRequests(query,projection,function(err,requests){
@@ -133,6 +135,7 @@ var request = {
                             request.name = eachrequest.user_details.name;
                             request.best_offer = 5000;
                             request.is_yours_best = true;
+                            request.type=eachrequest.type;
                             delete request.user_details;
                             requests_obj.push(request);
                             callback();
