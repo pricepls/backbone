@@ -448,12 +448,14 @@ var listing = {
 
                     if(imagerslt){
 
+                        console.log(imagerslt);
                          images.name=shortid.generate();
-                         images.url=imagerslt.url;
+                         //images.url=imagerslt.url;
+                         images.url = imagerslt.appshow_url;
+
                          var fs = require('fs');
                          fs.unlinkSync(image_path);
-
-                        callback();
+                         callback();
                     }
                 });
             },
