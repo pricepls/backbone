@@ -392,6 +392,7 @@ var vendor={
     checkAccountActive :function(req,res,next){
 
         var vendor_id = req.query.vendor_id || undefined;
+        var app_version = req.query.app_version || undefined;
         var response = { status:'' };
         if(vendor_id === undefined){
 

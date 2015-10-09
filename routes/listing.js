@@ -99,6 +99,7 @@ var listing = {
                             next(err);
                         else {
                             if(listingData !==null){
+                                listingData.location=listingData.city +', '+ listingData.state+', '+listingData.state;
                                 config.LISTING = listingData;
                             }else{
                                 config.LISTING ={};
