@@ -43,7 +43,6 @@ router.post('/vendor/new-price',request.newPrice);
 router.post('/vendor/init-recharge',payment.initRecharge);
 
 
-
 router.get('/vendor/confimed-bookings',booking.confirmedBookings);
 router.get('/vendor/getbooking',booking.getBookingDetails);
 

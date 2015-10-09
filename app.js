@@ -44,6 +44,8 @@ var port=configs.port;
 // router files
 
 var router=require('./routes');
+var cronjobs = require('./lib/cronjobs');
+
 app.use('/',router);
 
 // catch 404 and forward to error handler

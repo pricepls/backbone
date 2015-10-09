@@ -409,10 +409,10 @@ var vendor={
 
                     var status_obj={};
                     if(status){
-                        status_obj.avctive=true;
+                        status_obj.active=true;
                         status_obj.force_update=false;
                     }else{
-                        status_obj.avctive=false;
+                        status_obj.active=false;
                         status_obj.force_update=false;
                     }
                     response.status='success';

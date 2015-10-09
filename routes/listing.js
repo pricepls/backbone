@@ -448,11 +448,10 @@ var listing = {
 
                     if(imagerslt){
 
-                        console.log(imagerslt);
                          images.name=shortid.generate();
                          //images.url=imagerslt.url;
-                         images.url = imagerslt.appshow_url;
-
+                         images.url=imagerslt.url;
+                         images.original_url = imagerslt.appshow_url;
                          var fs = require('fs');
                          fs.unlinkSync(image_path);
                          callback();
@@ -474,6 +473,7 @@ var listing = {
             if(!err){
                 response.status="success";
                 response.message=constants.messages['3005'];
+                delete images.original_url;
                 response.data = images;
                 res.json(response);
             }
