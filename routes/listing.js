@@ -323,8 +323,20 @@ var listing = {
                     if(length > 3){
                         area = location_split[length-3];
                     }
-                    callback();
-
+                    mysqlDB.newCounty(country, country_short, function (err, id) {
+                        if (!err)
+                            country_id = id;
+                        mysqlDB.newState(state, state_short, country_id, function (err, id) {
+                            if (!err)
+                                state_id = id;
+                            mysqlDB.newCity(city, country_id, state_id, function (err, id) {
+                                if (!err)
+                                    city_id = id;
+                                callback();
+                            });
+                        });
+                    });
+                    
                 }else {
 
                     var geocode_url = configs.google.geocode_url;
