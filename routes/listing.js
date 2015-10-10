@@ -451,8 +451,8 @@ var listing = {
 
                          images.name=shortid.generate();
                          //images.url=imagerslt.url;
-                         images.url=imagerslt.url;
-                         images.original_url = imagerslt.appshow_url;
+                         images.url=imagerslt.appshow_url;
+                         images.original_url = imagerslt.url;
                          var fs = require('fs');
                          fs.unlinkSync(image_path);
                          callback();
