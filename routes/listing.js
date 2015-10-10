@@ -223,10 +223,10 @@ var listing = {
     },
     newListing : function(req,res,next){
 
-        console.log(req);
         var response = {
             status:""
         }
+        console.log(req.body);
         var category_id = parseInt(req.body.category_id) || undefined;
         var category = req.body.category || undefined;
         var subtype_id = parseInt(req.body.subtype_id) || undefined;
@@ -311,15 +311,20 @@ var listing = {
             //},
             function(callback){
 
-                //if(location !== undefined) {
-                //    location_split = location.split(',');
-                //    area = location_split[0];
-                //    city = location_split[1]
-                //    state = location_split[2]
-                //    state_short = state.substr(0, 2);
-                //    country = location_split[3]
-                //    country_short = country.substr(0, 2);
-                //}else{
+                if(location !== undefined && location.split(',').length >= 3) {
+                    var location_split = location.split(',');
+                    var length = location_split.length-1;
+
+                    city = location_split[length-2]
+                    state = location_split[length-1]
+                    state_short = state.substr(0, 2);
+                    country = location_split[length]
+                    country_short = country.substr(0, 2);
+                    if(length > 3){
+                        area = location_split[length-3];
+                    }
+
+                }else{
 
                     var geocode_url = configs.google.geocode_url;
                     var geocode_key = configs.google.geocode_key;
