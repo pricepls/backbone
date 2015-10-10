@@ -323,40 +323,41 @@ var listing = {
                     if(length > 3){
                         area = location_split[length-3];
                     }
+                    callback();
 
-                }else{
+                }else {
 
                     var geocode_url = configs.google.geocode_url;
                     var geocode_key = configs.google.geocode_key;
-                    var qs = "latlng="+lat+","+long+"&key="+geocode_key;
-                    var final_url = geocode_url+qs;
-                    request.makeSimpleGetRequest(final_url,function(err,data){
+                    var qs = "latlng=" + lat + "," + long + "&key=" + geocode_key;
+                    var final_url = geocode_url + qs;
+                    request.makeSimpleGetRequest(final_url, function (err, data) {
 
-                        if(!err){
+                        if (!err) {
                             var result = JSON.parse(data).results;
-                            if(result.length > 0){
+                            if (result.length > 0) {
 
                                 var first_component = result[1];
                                 var address_components = first_component.formatted_address;
-                                var address_split=address_components.split(',');
-                                var address_length = address_split.length-1;
+                                var address_split = address_components.split(',');
+                                var address_length = address_split.length - 1;
                                 country = address_split[address_length].trim();
                                 country_short = country.substr(0, 3);
-                                var state_with_pin = address_split[address_length-1].trim();
+                                var state_with_pin = address_split[address_length - 1].trim();
                                 var state_with_pin_split = state_with_pin.split(' ');
-                                state=state_with_pin_split[0];
+                                state = state_with_pin_split[0];
                                 state_short = state.substr(0, 3);
-                                city = address_split[address_length-2].trim();
-                                area = address_split[address_length-3].trim();
-                                mysqlDB.newCounty(country,country_short,function(err,id){
-                                    if(!err)
-                                        country_id= id;
-                                    mysqlDB.newState(state,state_short,country_id,function(err,id){
-                                        if(!err)
-                                            state_id= id;
-                                        mysqlDB.newCity(city,country_id,state_id,function(err,id){
-                                            if(!err)
-                                                city_id=id;
+                                city = address_split[address_length - 2].trim();
+                                area = address_split[address_length - 3].trim();
+                                mysqlDB.newCounty(country, country_short, function (err, id) {
+                                    if (!err)
+                                        country_id = id;
+                                    mysqlDB.newState(state, state_short, country_id, function (err, id) {
+                                        if (!err)
+                                            state_id = id;
+                                        mysqlDB.newCity(city, country_id, state_id, function (err, id) {
+                                            if (!err)
+                                                city_id = id;
                                             callback();
                                         });
                                     });
@@ -365,9 +366,9 @@ var listing = {
                             }
                         }
                     });
-                //}
+                    //}
 
-
+                }
             },
             function(callback){
 
