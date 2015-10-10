@@ -315,13 +315,13 @@ var listing = {
                     var location_split = location.split(',');
                     var length = location_split.length-1;
 
-                    city = location_split[length-2]
-                    state = location_split[length-1]
+                    city = location_split[length-2].trim();
+                    state = location_split[length-1].trim();
                     state_short = state.substr(0, 2);
-                    country = location_split[length]
+                    country = location_split[length].trim();
                     country_short = country.substr(0, 2);
                     if(length > 3){
-                        area = location_split[length-3];
+                        area = location_split[length-3].trim();
                     }
                     mysqlDB.newCounty(country, country_short, function (err, id) {
                         if (!err)
@@ -336,7 +336,7 @@ var listing = {
                             });
                         });
                     });
-                    
+
                 }else {
 
                     var geocode_url = configs.google.geocode_url;
