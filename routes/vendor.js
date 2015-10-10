@@ -149,9 +149,9 @@ var vendor={
         var response={
             status:""
         }
-        if(listing_id !== undefined && vendor_id !== undefined){
+        if(vendor_id !== undefined){
 
-            mongo.saveGCMToken(listing_id,vendor_id,gcm_token,function(err,status){
+            mongo.saveGCMToken(vendor_id,gcm_token,function(err,status){
 
                 if(err){
                     response.status="error";
