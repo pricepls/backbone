@@ -425,6 +425,11 @@ var vendor={
 
 
         }
+    },
+    getHelp :function(req,res,next){
+
+        res.sendFile(__dirname+'/htmls/help.html');
+
     }
 }
 

@@ -1,0 +1,96 @@
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+<style>
+
+    body {
+        margin:10px 0px;
+        padding:0;
+        width:500px;
+        margin:auto;
+        background:#ededed;
+    }
+
+    #accordion {
+        margin-top:10px;
+        border:thin solid #cecece;
+        border-top:none;
+        border-bottom:none;
+    }
+
+    #accordion div {
+        background:white;
+        height:100px;
+        line-height:100px;
+        display:none;
+        border-bottom:thin solid #cecece;
+        padding-left:15px;
+    }
+
+    a {
+        display:block;
+        width:483px;
+        background:#f4f4f4;
+        background-image: -webkit-linear-gradient(white,#ededed);
+        background-image: -moz-linear-gradient(white,#ededed);
+        background-image: -o-linear-gradient(white,#ededed);
+        background-image: -ms-linear-gradient(white,#ededed);
+        background-image:linear-gradient(white,#ededed);
+        color:#959696;
+        padding-left:15px;
+        height:40px;
+        line-height:40px;
+        text-decoration:none;
+        border-bottom:thin solid #cecece;
+        font-family:Arial;
+        font-size:13px;
+        font-weight:bold;
+        text-shadow:0px 1px 1px white;
+    }
+
+    .first {
+        border-top:thin solid #cecece;
+    }
+
+
+</style>
+<div id="accordion">
+    <a href="#one" class="first">Recent Posts</a>
+    <div id="one">
+        this is some info.
+    </div>
+
+    <a href="#two">Popular Posts</a>
+    <div id="two">
+        this is some more info.
+    </div>
+
+    <a href="#three">Archived Posts</a>
+    <div id="three">
+        this is even more info.
+    </div>
+</div>
+
+<script>
+
+    // display the first div by default.
+    $("#accordion div").first().css('display', 'block');
+
+
+    // Get all the links.
+    var link = $("#accordion a");
+
+    // On clicking of the links do something.
+    link.on('click', function(e) {
+
+        e.preventDefault();
+
+        var a = $(this).attr("href");
+
+        $(a).slideDown('fast');
+
+        //$(a).slideToggle('fast');
+        $("#accordion div").not(a).slideUp('fast');
+
+    });
+
+</script>

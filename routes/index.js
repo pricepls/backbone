@@ -41,6 +41,7 @@ router.get('/vendor/getrequest',request.getRequestDetails);
 
 router.post('/vendor/new-price',request.newPrice);
 router.post('/vendor/init-recharge',payment.initRecharge);
+router.get('/vendor/get-help',vendor.getHelp);
 
 
 router.get('/vendor/confimed-bookings',booking.confirmedBookings);
