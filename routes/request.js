@@ -54,8 +54,9 @@ var request = {
 
                             var request = eachrequest;
                             request.name = eachrequest.user_details.name;
-                            if(eachrequest.notified_vendors.best_price){
-                                request.best_offer = eachrequest.notified_vendors.best_price;
+
+                            if(eachrequest.notified_vendors[0].best_price){
+                                request.best_offer = eachrequest.notified_vendors[0].best_price
                             }else{
                                 request.best_offer = "na";
                             }
@@ -138,8 +139,8 @@ var request = {
 
                             var request = eachrequest;
                             request.name = eachrequest.user_details.name;
-                            if(eachrequest.notified_vendors.best_price){
-                                request.best_offer = eachrequest.notified_vendors.best_price;
+                            if(eachrequest.notified_vendors[0].best_price){
+                                request.best_offer = eachrequest.notified_vendors[0].best_price;
                             }else{
                                 request.best_offer = "na";
                             }
@@ -203,8 +204,12 @@ var request = {
                 }else{
                     if(requestData !==null){
                         response.status="success";
-                        requestData.best_offer=5000;
+
                         var notified_vendors = requestData.notified_vendors[0];
+                        if(notified_vendors.best_price)
+                            requestData.best_offer=notified_vendors.best_price;
+                        else
+                            requestData.best_offer='na';
                         if(notified_vendors.pp_price){
                             requestData.pp_price = notified_vendors.pp_price;
                             requestData.type=notified_vendors.type;
