@@ -243,8 +243,10 @@ var request = {
 
         }else{
 
+            var current_time = new Date().getTime();
+
             if(action === "rejected"){
-                var operator ={$set:{"notified_vendors.$.status":"rejected"},$unset:{"notified_vendors.$.pp_price":"","notified_vendors.$.type":""}};
+                var operator ={$set:{"notified_vendors.$.status":"rejected"},$unset:{"notified_vendors.$.pp_price":"","notified_vendors.$.type":"",update_at:current_time}};
 
             }else{
 
@@ -258,7 +260,7 @@ var request = {
                     each_quote.price = price[keys[i]];
                     quoted_price.push(each_quote);
                 }
-                var operator ={$set:{"notified_vendors.$.pp_price":quoted_price,"notified_vendors.$.status":"accepted","notified_vendors.$.type":type}}
+                var operator ={$set:{"notified_vendors.$.pp_price":quoted_price,"notified_vendors.$.status":"accepted","notified_vendors.$.type":type,updated_at:current_time}}
            }
 
             var query = {
