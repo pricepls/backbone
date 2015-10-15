@@ -39,7 +39,8 @@ var request = {
                 created_date:1,
                 no_of_guests:1,
                 no_of_nights:1,
-                user_details:1
+                user_details:1,
+                'notified_vendors.$.best_price':1
             }
             mongo.getNewrequests(query,projection,function(err,requests){
 
@@ -53,7 +54,12 @@ var request = {
 
                             var request = eachrequest;
                             request.name = eachrequest.user_details.name;
-                            request.best_offer = 5000;
+                            if(eachrequest.notified_vendors.best_price){
+                                request.best_offer = eachrequest.notified_vendors.best_price;
+                            }else{
+                                request.best_offer = "na";
+                            }
+                            delete request.notified_vendors;
                             delete request.user_details;
                             requests_obj.push(request);
                             callback();
@@ -117,7 +123,7 @@ var request = {
                 no_of_guests:1,
                 no_of_nights:1,
                 user_details:1,
-
+                'notified_vendors.$.best_price':1
 
             }
             mongo.getRepliedRequests(query,projection,function(err,requests){
@@ -132,9 +138,14 @@ var request = {
 
                             var request = eachrequest;
                             request.name = eachrequest.user_details.name;
-                            request.best_offer = 5000;
+                            if(eachrequest.notified_vendors.best_price){
+                                request.best_offer = eachrequest.notified_vendors.best_price;
+                            }else{
+                                request.best_offer = "na";
+                            }
                             request.is_yours_best = true;
                             request.type=eachrequest.type;
+                            delete request.notified_vendors;
                             delete request.user_details;
                             requests_obj.push(request);
                             callback();
