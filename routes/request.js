@@ -56,7 +56,8 @@ var request = {
                             request.name = eachrequest.user_details.name;
 
                             if(eachrequest.notified_vendors[0].best_price){
-                                request.best_offer = eachrequest.notified_vendors[0].best_price
+                                var best=eachrequest.notified_vendors[0].best_price;
+                                request.best_offer = best.toString();
                             }else{
                                 request.best_offer = "na";
                             }
@@ -139,8 +140,10 @@ var request = {
 
                             var request = eachrequest;
                             request.name = eachrequest.user_details.name;
+                            console.log(eachrequest.notified_vendors[0]);
                             if(eachrequest.notified_vendors[0].best_price){
-                                request.best_offer = eachrequest.notified_vendors[0].best_price;
+                                var best=eachrequest.notified_vendors[0].best_price;
+                                request.best_offer = best.toString();
                             }else{
                                 request.best_offer = "na";
                             }
