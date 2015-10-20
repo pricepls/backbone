@@ -25,6 +25,7 @@
     "2017":"Please provide all neccessary filed",
     "2018":"Vendor id not found in the request",
     "3001":"Price quoted successfully",
+    "3009":"Request rejected successfully",
     "3002":"We have sent your new password",
     "3003":"Password update successfully",
     "3004":"Listing created successfully",

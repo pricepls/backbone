@@ -255,10 +255,11 @@ var request = {
         }else{
 
             var current_time = new Date().getTime();
+            var success_msg = constants.messages['3001'];
 
             if(action === "rejected"){
                 var operator ={$set:{"notified_vendors.$.status":"rejected"},$unset:{"notified_vendors.$.pp_price":"","notified_vendors.$.type":"",update_at:current_time}};
-
+                success_msg= constants.messages['3009'];
             }else{
 
 
@@ -290,7 +291,7 @@ var request = {
                 else{
                     response.statusCode=200;
                     response.status="success";
-                    response.message = constants.messages['3001'];
+                    response.message = success_msg;
                     res.json(response);
                 }
 
