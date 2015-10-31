@@ -58,7 +58,7 @@ var vendor={
                                 response.statusCode=200;
                                 response.status="success";
 
-                                spruce.info("login ph:"+phone+ "listing "+listing.listing_id);
+                                spruce.info("login ph:"+phone+ "listing "+vendor.listing_id);
 
                                 response.data=vendor;
                                 res.json(response);
