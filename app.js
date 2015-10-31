@@ -1,8 +1,9 @@
 if(process.env.ENVIORNMENT!='development')
     require('newrelic');
 var express=require('express'),
-    bodyParser=require('body-parser'),
-    logger=require('morgan');
+    bodyParser=require('body-parser')
+    //logger=require('morgan');
+var spruce = require('spruce').init();
 
 app=express();
 
@@ -22,12 +23,12 @@ var configs;
 // reading config based on env
 if(process.env.ENVIORNMENT =='development'){
 
-    app.use(logger('short'));
+    //app.use(logger('short'));
     configs=configFile.development;
 
 }else{
 
-    app.use(logger('short'));
+    //app.use(logger('short'));
     configs=configFile.production;
 
 }
@@ -58,6 +59,8 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
+        spruce.error(err);
+
         res.json({
             status:'error',
             message: err.message,
@@ -70,6 +73,8 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
+    spruce.error("ERROR "+ err);
+
     res.json({
         status:'error',
         message: err.message,
@@ -81,6 +86,6 @@ app.use(function(err, req, res, next) {
 
 app.listen(port,function(){
 
-    console.log("price pls back-bone started");
+    spruce.info("price pls back-bone started");
 
 });

@@ -10,6 +10,7 @@ var mongo=require('../lib/mongodb');
 var gcm = require('../lib/gcm');
 var neo4j = require('../lib/neo');
 var moment=require('moment');
+var spruce = require('spruce').init();
 
 mysqlDB.init();
 
@@ -56,6 +57,9 @@ var vendor={
 
                                 response.statusCode=200;
                                 response.status="success";
+
+                                spruce.info("login ph:"+phone+ "listing "+listing_id);
+
                                 response.data=vendor;
                                 res.json(response);
 
@@ -67,6 +71,7 @@ var vendor={
                         response.status="error";
                         response.error_code="1002";
                         response.error_msg=constants.messages['1002'];
+                        spruce.info("login ph:"+phone +" RESPONSE "+JSON.stringify(response));
                         res.json(response);
 
                     }
@@ -149,6 +154,7 @@ var vendor={
         var response={
             status:""
         }
+        spruce.info("addGCMToken listing "+listing_id+" vendor_id "+vendor_id);
         if(vendor_id !== undefined){
 
             mongo.saveGCMToken(vendor_id,gcm_token,function(err,status){
@@ -418,6 +424,7 @@ var vendor={
                     }
                     response.status='success';
                     response.data = status_obj;
+                    spruce.info("checkAccountActive vendor_id "+vendor_id +"  RESPONSE "+JSON.stringify(response));
                     res.json(response);
                 }
             })
