@@ -20,6 +20,7 @@ var request = {
 
             var query={
                 /* query using element match */
+                status:"active",
                 "notified_vendors":{
                     $elemMatch:{
                         vendor_id : parseInt(vendor_id),
@@ -110,6 +111,7 @@ var request = {
         if (vendor_id !== undefined) {
 
             var query={
+                status:"active",
                 "notified_vendors":{
                     $elemMatch:{
                         vendor_id : parseInt(vendor_id),
