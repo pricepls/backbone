@@ -420,6 +420,7 @@ var listing = {
                     "star_rating":starrating,
                     "created_at": current_time,
                     "modified_at": current_time,
+                    "updated_at":current_time,
                     "room_types":list_rooms,
                     "images":[],
                     "status":"active"
