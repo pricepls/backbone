@@ -40,14 +40,14 @@
 
     "mysql":{
 
-      "host":"localhost",
+      "host":"188.166.229.101",
       "user":"root",
-      "password":"root"
+      "password":"wni8wCl600TR"
 
     },
     "mongo":{
 
-      "host":"localhost",
+      "host":"188.166.244.166",
       "port":"27017"
     },
     "neo":{
