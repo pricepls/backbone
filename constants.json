@@ -34,6 +34,14 @@
     "3007":"Listing removed successfully",
     "3008":"Recharge request received we will notify you once its success"
 
+  },
+  "constants":{
+
+    "guests_per_room":2,
+    "luxury_tax":10,
+    "service_tax":7
+
+
   }
 
 }
