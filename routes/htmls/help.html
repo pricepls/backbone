@@ -1,85 +1,212 @@
-
 <style>
 
-    body {
-        margin:10px 0px;
-        padding:0;
-        width:500px;
-        margin:auto;
-        background:#ededed;
+    .col{
+        width: 98%;
+    }
+    .panel{
+        margin-bottom: 29px;
+        background-color: #ffffff;
+        border: 1px solid transparent;
+        border-radius: 2px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
     }
 
-    #accordion {
-        margin-top:10px;
-        border:thin solid #cecece;
-        border-top:none;
-        border-bottom:none;
+    .panel-body {
+        padding: 15px;
+        text-align: center;
     }
 
-    #accordion div {
-        background:white;
-        height:100px;
-        line-height:100px;
-        display:none;
-        border-bottom:thin solid #cecece;
-        padding-left:15px;
+    .panel-heading {
+        padding: 10px 15px;
+        border-bottom: 1px solid transparent;
+        border-top-right-radius: 1px;
+        border-top-left-radius: 1px;
+    }
+    .panel-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 21px;
+        color: inherit;
+    }
+    h4, .h4 {
+        font-size: 23px;
     }
 
     a {
-        display:block;
-        width:483px;
-        background:#f4f4f4;
-        background-image: -webkit-linear-gradient(white,#ededed);
-        background-image: -moz-linear-gradient(white,#ededed);
-        background-image: -o-linear-gradient(white,#ededed);
-        background-image: -ms-linear-gradient(white,#ededed);
-        background-image:linear-gradient(white,#ededed);
-        color:#959696;
-        padding-left:15px;
-        height:40px;
-        line-height:40px;
-        text-decoration:none;
-        border-bottom:thin solid #cecece;
-        font-family:Arial;
-        font-size:13px;
-        font-weight:bold;
-        text-shadow:0px 1px 1px white;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
 
-    .first {
-        border-top:thin solid #cecece;
+
+
+    .btn {
+        display: inline-block;
+        margin-bottom: 0;
+        font-weight: normal;
+        text-align: center;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        background-image: none;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        padding: 4px 16px;
+        font-size: 18px;
+        line-height: 1.618;
+        border-radius: 2px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
+
+    .btn-info {
+        color: #ffffff;
+        background-color: #03a9f4;
+        border-color: #0398db;
+    }
+
+    .button {
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+        padding: 5px 32px;
+        border: 1px solid #00786c;
+        border-radius: 19px;
+        background: #00c3b0;
+        background: -webkit-gradient(linear, left top, left bottom, from(#00c3b0), to(#00786c));
+        background: -moz-linear-gradient(top, #00c3b0, #00786c);
+        background: linear-gradient(to bottom, #00c3b0, #00786c);
+        text-shadow: #004b44 1px 1px 0px;
+        font: normal normal bold 24px trebuchet ms;
+        color: #ffffff;
+        text-decoration: none;
+    }
+    .button:hover,
+    .button:focus {
+        border: 1px solid #009687;
+        background: #00ead3;
+        background: -webkit-gradient(linear, left top, left bottom, from(#00ead3), to(#009082));
+        background: -moz-linear-gradient(top, #00ead3, #009082);
+        background: linear-gradient(to bottom, #00ead3, #009082);
+        color: #ffffff;
+        text-decoration: none;
+    }
+    .button:active {
+        background: #00786c;
+        background: -webkit-gradient(linear, left top, left bottom, from(#00786c), to(#00786c));
+        background: -moz-linear-gradient(top, #00786c, #00786c);
+        background: linear-gradient(to bottom, #00786c, #00786c);
+    }
+    .button:after{
+        content:  "\0000a0";
+        display: inline-block;
+        height: 24px;
+        width: 24px;
+        line-height: 24px;
+        margin: 0 -4px -6px 4px;
+        position: relative;
+        top: 2px;
+        left: 0px;
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAA3ElEQVRIie3WwUrDQBDG8V+L9NBTz2ovxffw3rtHEcQX8AH6MH0J730RQSSFUvQoElr0kBTSNbtZbI/5wzJkZna+TAI7O5BmhIuOnB3KjpxWnlBgi01tm+vgK/AYKzJICBS4xRozPATxJV5xiRWu2oqk2p/gvvH8FcTvgtxWhgmBLvYn7EX1fXP5iAVO6SCLXqAX6AV6gQxS8+DH3yM6xjhWKzUPPjENfPPavgT+98wXOaLtuH6rV0j0uE51UOJGNTIPPNd23PBd4/s/AgvVrM25VSxiwdRP5gzXll+vUiaGYw6npAAAAABJRU5ErkJggg==") no-repeat left center transparent;
+        background-size: 100% 100%;
+    }
+
+
+    .wat-button {
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+        padding: 5px 32px;
+        border: 1px solid #00786c;
+        border-radius: 19px;
+        background: #00c3b0;
+        background: -webkit-gradient(linear, left top, left bottom, from(#00c3b0), to(#00786c));
+        background: -moz-linear-gradient(top, #00c3b0, #00786c);
+        background: linear-gradient(to bottom, #00c3b0, #00786c);
+        text-shadow: #004b44 1px 1px 0px;
+        font: normal normal bold 24px trebuchet ms;
+        color: #ffffff;
+        text-decoration: none;
+    }
+    .wat-button:hover,
+    .wat-button:focus {
+        border: 1px solid #009687;
+        background: #00ead3;
+        background: -webkit-gradient(linear, left top, left bottom, from(#00ead3), to(#009082));
+        background: -moz-linear-gradient(top, #00ead3, #009082);
+        background: linear-gradient(to bottom, #00ead3, #009082);
+        color: #ffffff;
+        text-decoration: none;
+    }
+    .wat-button:active {
+        background: #00786c;
+        background: -webkit-gradient(linear, left top, left bottom, from(#00786c), to(#00786c));
+        background: -moz-linear-gradient(top, #00786c, #00786c);
+        background: linear-gradient(to bottom, #00786c, #00786c);
+    }
+    .wat-button:after{
+        content:  "\0000a0";
+        display: inline-block;
+        height: 24px;
+        width: 24px;
+        line-height: 24px;
+        margin: 0 -4px -6px 4px;
+        position: relative;
+        top: 2px;
+        left: 0px;
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAA3ElEQVRIie3WwUrDQBDG8V+L9NBTz2ovxffw3rtHEcQX8AH6MH0J730RQSSFUvQoElr0kBTSNbtZbI/5wzJkZna+TAI7O5BmhIuOnB3KjpxWnlBgi01tm+vgK/AYKzJICBS4xRozPATxJV5xiRWu2oqk2p/gvvH8FcTvgtxWhgmBLvYn7EX1fXP5iAVO6SCLXqAX6AV6gQxS8+DH3yM6xjhWKzUPPjENfPPavgT+98wXOaLtuH6rV0j0uE51UOJGNTIPPNd23PBd4/s/AgvVrM25VSxiwdRP5gzXll+vUiaGYw6npAAAAABJRU5ErkJggg==") no-repeat left center transparent;
+        background-size: 100% 100%;
+    }
+
 
 
 </style>
-<div id="accordion">
 
-  <a href="intent://send/919620522543#Intent;scheme=smsto;package=com.whatsapp;action=android.intent.action.SENDTO;end">Open watsapp</a>
+<div class="col-md-4">
 
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <!--<h4>Help Center</h4>-->
+            </div>
+            </div>
+        </div>
+
+        <div class="panel-body">
+
+            <p>
+                Hey There,
+                <br/>
+                <br/>
+                Need any help ?
+                <br/>
+                <br/>
+                You can either
+                <br/>
+                <br/>
+
+                <a class="button" href="tel:9620522543">Call Us</a>
+<br/>
+    <br/>            or
+                <br/>
+                <br/>
+                <a class="wat-button" href="whatsapp://send?text=">WhatsAPP</a>
+                <br/>
+                <br/>
+
+                <a class="wat-button" href="intent://send/0123456789#Intent;scheme=smsto;package=com.whatsapp;action=android.intent.action.SENDTO;end">WhatsAPP CHECK</a>
+
+                us
+                <br/>
+
+            </p>
+
+
+        </div>
+
+
+
+    </div>
 
 </div>
-
-<script>
-
-    // display the first div by default.
-    $("#accordion div").first().css('display', 'block');
-
-
-    // Get all the links.
-    var link = $("#accordion a");
-
-    // On clicking of the links do something.
-    link.on('click', function(e) {
-
-        e.preventDefault();
-
-        var a = $(this).attr("href");
-
-        $(a).slideDown('fast');
-
-        //$(a).slideToggle('fast');
-        $("#accordion div").not(a).slideUp('fast');
-
-    });
-
-</script>
