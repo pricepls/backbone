@@ -26,7 +26,7 @@ var listing = {
             response.statusCode = 200;
             response.status = "error";
             response.error_code = "2004",
-            response.error_msg = constants.messages['2004']
+                response.error_msg = constants.messages['2004']
             res.json(response);
         } else {
 
@@ -233,6 +233,19 @@ var listing = {
         var subtype=req.body.subtype || undefined;
         var lat = req.body.lat || undefined;
         var long = req.body.long || undefined;
+        var timingtype = null;
+
+        var query={
+            "latitude":lat,
+            "longitude":long,
+            "category_id":category_id,
+            "category":category,
+            "subcategory":subtype,
+            "subcategory_id":subtype_id,
+            "images":[],
+            "status":"active"
+        }
+
         if(category_id === 1){
 
             var checkin = req.body.checkin || undefined;
@@ -251,8 +264,59 @@ var listing = {
             var amenities = req.body.amenities || undefined;
 
 
-        }else if (category === 2){
+            query.check_in=checkin;
+            query.check_out=checkout;
+            query.star_rating=starrating;
+            query.room_types=list_rooms;
+            query.amenities = amenities;
 
+
+
+
+        }else if (category_id === 2){
+
+            var timing_type_id = parseInt(req.body.timingtype);
+            if(timing_type_id == 1){
+                timingtype = "Same time";
+            }else{
+                timingtype = "Multiple timings";
+            }
+
+            var timings = req.body.timings;
+            var prefect_for = req.body.perfect_for;
+            var days = req.body.days;
+            var duration = req.body.duration;
+
+            /* pricing = 1 ( same for everyone  ), 2 (diff for adults and kids ), 3 (diff for mens womens and kids)  */
+
+            var pricing = req.body.pricing;
+            /* pricing = 1 ( same for weekdays  ), 2 (diff for weekends )  */
+
+            var weekpricing = req.body.weekpricing;
+            var activity_name = req.body.activity_name;
+            var inclusions = req.body.inclusions;
+            query.timing_type_id=timing_type_id;
+            query.timingtype=timingtype;
+            query.timings=timings;
+            query.prefect_for=prefect_for;
+            query.days=days;
+            query.duration=duration;
+            query.pricing = pricing;
+            query.weekpricing = weekpricing;
+            query.activity_name = activity_name;
+            query.inclusions=inclusions;
+
+            var prices = req.body.activity_prices || undefined;
+            prices = JSON.parse(prices);
+            var list_prices = [];
+            var keys = Object.keys(prices), len = keys.length;
+            for(var i = 0 ; i < len ; i++){
+                var each_price= {};
+                each_price.name= keys[i];
+                each_price.price = prices[keys[i]];
+                list_prices.push(each_price);
+            }
+            query.prices = list_prices;
 
         }
         var city_id = undefined;
@@ -270,7 +334,7 @@ var listing = {
         var location = req.body.location || undefined;
         var area = undefined;
 
-        async.series([
+        async.parallel([
 
             //function(callback){
             //
@@ -309,6 +373,8 @@ var listing = {
             //        }
             //    });
             //},
+
+
             function(callback){
 
                 if(location !== undefined && location.split(',').length >= 3) {
@@ -399,54 +465,42 @@ var listing = {
             },
             function(callback){
 
-                var query={
-                    "listing_id":listing_id,
-                    "area":area,
-                    "city_id":city_id,
-                    "city":city,
-                    "state":state,
-                    "country":country,
-                    "latitude":lat,
-                    "longitude":long,
-                    "amenities":amenities,
-                    "vendor_id":parseInt(vendor_id),
-                    "vendor_details":vendor_obj,
-                    "category_id":category_id,
-                    "category":category,
-                    "subcategory":subtype,
-                    "subcategory_id":subtype_id,
-                    "check_in":checkin,
-                    "check_out":checkout,
-                    "star_rating":starrating,
-                    "created_at": current_time,
-                    "modified_at": current_time,
-                    "updated_at":current_time,
-                    "room_types":list_rooms,
-                    "images":[],
-                    "status":"active"
-                }
-                mongo.createListing(query,function(err,success){
-
+                utils.getNextSequenceNumber("listing",function(err,number){
                     if(err)
                         return callback(err);
-                    else{
-                        callback();
-                    }
-                });
+                    else
+                        query.listing_number = number;
+                    callback();
+                })
+
 
             }
 
         ],function(err){
 
-            if(err)
-                next(err);
-            else{
+            query.listing_id=listing_id;
+            query.area=area;
+            query.city_id=city_id;
+            query.city=city;
+            query.state=state;
+            query.country=country;
+            query.vendor_id=parseInt(vendor_id);
+            query.vendor_details=vendor_obj;
+            query.created_at= current_time;
+            query.modified_at=current_time;
+            query.updated_at=current_time;
+            mongo.createListing(query,function(err,success){
 
-                response.status ="success";
-                response.message = constants.messages['3004'];
-                response.listing_id = listing_id;
-                res.json(response);
-            }
+                if(err)
+                    next(err);
+                else{
+                    response.status ="success";
+                    response.message = constants.messages['3004'];
+                    response.listing_id = listing_id;
+                    res.json(response);
+                }
+            });
+
         })
 
 
@@ -468,13 +522,13 @@ var listing = {
 
                     if(imagerslt){
 
-                         images.name=shortid.generate();
-                         //images.url=imagerslt.url;
-                         images.url=imagerslt.appshow_url;
-                         images.original_url = imagerslt.url;
-                         var fs = require('fs');
-                         fs.unlinkSync(image_path);
-                         callback();
+                        images.name=shortid.generate();
+                        //images.url=imagerslt.url;
+                        images.url=imagerslt.appshow_url;
+                        images.original_url = imagerslt.url;
+                        var fs = require('fs');
+                        fs.unlinkSync(image_path);
+                        callback();
                     }
                 });
             },
@@ -538,7 +592,7 @@ var listing = {
                 mongo.deleteImage(image_id,listing_id,function(err,status){
 
                     if(err)
-                       return callback(err);
+                        return callback(err);
                     else{
 
                         callback();
@@ -567,35 +621,35 @@ var listing = {
             vendor_id=parseInt(vendor_id);
             mongo.checkListingMatches(listing_id,vendor_id,function(err,status){
 
-               if(err)
+                if(err)
                     next(err);
-               else{
-                   if(status){
+                else{
+                    if(status){
 
-                       mongo.removeListing(listing_id,vendor_id,function(err,status){
+                        mongo.removeListing(listing_id,vendor_id,function(err,status){
 
-                           if(err){
+                            if(err){
                                 next(err);
-                           }else{
+                            }else{
 
-                               response.status='success';
-                               response.message=constants.messages['3007'];
-                               res.json(response);
+                                response.status='success';
+                                response.message=constants.messages['3007'];
+                                res.json(response);
 
-                           }
-                       });
+                            }
+                        });
 
 
-                   }else{
+                    }else{
 
-                       response.status='error';
-                       response.error_code=2016;
-                       response.error_msg=constants.messages['2016'];
-                       res.json(response);
+                        response.status='error';
+                        response.error_code=2016;
+                        response.error_msg=constants.messages['2016'];
+                        res.json(response);
 
-                   }
+                    }
 
-               }
+                }
             });
 
         }else {
