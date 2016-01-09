@@ -27,7 +27,8 @@ router.post('/vendor/change-password',vendor.changePassword);
 
 //router.post('/vendor/listing/new',listing.createListing);
 router.post('/vendor/listing/new',listing.newListing);
-router.get('/vendor/listing/getlisting',listing.getListingDetails);
+//router.get('/vendor/listing/getlisting',listing.getListingDetails);
+router.get('/vendor/listing/getlisting',listing.getListingDetailsNew);
 router.post('/vendor/listing/newimage',upload.single('thumbnail'),listing.newImage);
 router.post('/vendor/listing/deleteimage',listing.deleteImage);
 router.post('/vendor/listing/deleteMultiimage',listing.deleteMultiImages);

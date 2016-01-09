@@ -42,19 +42,19 @@ var vendor={
                     if(vendor!==undefined){
 
 
-                        mongo.getListingId(vendor.id,function(err,listing){
+                        vendor.listings = [];
+                        mongo.getListingId(vendor.id,function(err,listings){
 
                             if(err)
                                 next(err);
                             else{
 
-                                if(listing !== null){
-                                    vendor.listing_id = listing.listing_id;
-                                    vendor.room_types = listing.room_types;
-                                    //util.checkGraphNodeExits(vendor.id,listingid);
-                                }else
-                                    vendor.listing_id=null;
+                                if(listings !== null){
 
+                                    //vendor.room_types = listing.room_types;
+                                    //util.checkGraphNodeExits(vendor.id,listingid);
+                                    vendor.listings = listings;
+                                }
                                 response.statusCode=200;
                                 response.status="success";
 

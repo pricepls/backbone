@@ -36,13 +36,16 @@ var request = {
             var projection = {
                 request_id:1,
                 user_id:1,
+                city_name:1,
                 requested_date:1,
                 created_date:1,
                 no_of_guests:1,
                 no_of_nights:1,
                 user_details:1,
-                'notified_vendors.$.best_price':1,
-                'updated_at':1
+                'notified_vendors':1,
+                'updated_at':1,
+                request_number:1,
+
             }
             mongo.getNewrequests(query,projection,function(err,requests){
 
@@ -54,22 +57,43 @@ var request = {
 
                         async.forEach(requests,function(eachrequest,callback){
 
-                            var request = eachrequest;
-                            request.name = eachrequest.user_details.name;
+                            (function (each) {
+                                each.notified_vendors.forEach(function (eachNVendors) {
+                                    var request = {};
+                                    var request = JSON.parse(JSON.stringify(each));
+                                    request.name = each.user_details.name;
+                                    request.listing_id = eachNVendors.listing_id;
+                                    request.subcategory = eachNVendors.subcategory;
+                                    request.category_id = eachNVendors.category_id;
 
-                            if(eachrequest.notified_vendors[0].best_price){
-                                var best=eachrequest.notified_vendors[0].best_price;
-                                request.best_offer = best.toString();
-                            }else{
-                                request.best_offer = "na";
-                            }
-                            delete request.notified_vendors;
-                            delete request.user_details;
-                            request.updated_at = eachrequest.updated_at.toString();
-                            requests_obj.push(request);
+                                    request.subcategory_id = eachNVendors.subtype_id;
+                                    request.unique_id = request.request_id+ "##$$"+eachNVendors.listing_id;
+
+                                    if (eachNVendors.best_price) {
+                                        var best = eachNVendors.best_price;
+                                        request.best_offer = best.toString();
+                                    } else {
+                                        request.best_offer = "na";
+                                    }
+                                    request.updated_at = each.updated_at.toString();
+
+                                    delete request.notified_vendors;
+                                    delete request.user_details;
+                                    requests_obj.push(request);
+
+                                })
+                            })(eachrequest)
+
                             callback();
 
                         },function(err){
+
+
+                            //requests_obj.forEach(function(each){
+                            //    delete each.notified_vendors;
+                            //    delete each.user_details;
+                            //})
+
 
                             response.statusCode=200;
                             response.status="success";
@@ -120,17 +144,24 @@ var request = {
 
                     }
                 }
+
+
             }
             var projection = {
+
+
                 request_id:1,
                 user_id:1,
+                city_name:1,
                 requested_date:1,
                 created_date:1,
                 no_of_guests:1,
                 no_of_nights:1,
                 user_details:1,
-                'notified_vendors.$.best_price':1,
-                'updated_at':1
+                'notified_vendors':1,
+                'updated_at':1,
+                request_number:1,
+
 
             }
             mongo.getRepliedRequests(query,projection,function(err,requests){
@@ -143,21 +174,51 @@ var request = {
 
                         async.forEach(requests,function(eachrequest,callback){
 
-                            var request = eachrequest;
-                            request.name = eachrequest.user_details.name;
-                            if(eachrequest.notified_vendors[0].best_price){
-                                var best=eachrequest.notified_vendors[0].best_price;
-                                request.best_offer = best.toString();
-                            }else{
-                                request.best_offer = "na";
-                            }
-                            request.is_yours_best = true;
-                            request.type=eachrequest.type;
-                            delete request.notified_vendors;
-                            delete request.user_details;
-                            request.updated_at = eachrequest.updated_at.toString();
-                            requests_obj.push(request);
+
+                            (function (each) {
+                                each.notified_vendors.forEach(function (eachNVendors) {
+                                    var request = {};
+                                    var request = JSON.parse(JSON.stringify(each));
+                                    request.name = each.user_details.name;
+                                    request.listing_id = eachNVendors.listing_id;
+                                    request.subcategory = eachNVendors.subcategory;
+                                    request.category_id = eachNVendors.category_id;
+
+                                    request.subcategory_id = eachNVendors.subtype_id;
+                                    request.unique_id = request.request_id+ "##$$"+eachNVendors.listing_id;
+
+                                    if (eachNVendors.best_price) {
+                                        var best = eachNVendors.best_price;
+                                        request.best_offer = best.toString();
+                                    } else {
+                                        request.best_offer = "na";
+                                    }
+                                    request.updated_at = each.updated_at.toString();
+
+                                    delete request.notified_vendors;
+                                    delete request.user_details;
+                                    requests_obj.push(request);
+
+                                })
+                            })(eachrequest)
+
                             callback();
+
+                            //var request = eachrequest;
+                            //request.name = eachrequest.user_details.name;
+                            //if(eachrequest.notified_vendors[0].best_price){
+                            //    var best=eachrequest.notified_vendors[0].best_price;
+                            //    request.best_offer = best.toString();
+                            //}else{
+                            //    request.best_offer = "na";
+                            //}
+                            //request.is_yours_best = true;
+                            //request.type=eachrequest.type;
+                            //delete request.notified_vendors;
+                            //delete request.user_details;
+                            //request.updated_at = eachrequest.updated_at.toString();
+                            //requests_obj.push(request);
+                            //callback();
 
                         },function(err){
 
@@ -196,7 +257,8 @@ var request = {
 
         var request_id = req.query.request_id || undefined;
         var vendor_id = req.query.vendor_id || undefined;
-        if(request_id === undefined && vendor_id !== undefined){
+        var listing_id = req.query.listing_id || undefined;
+        if(request_id === undefined && vendor_id !== undefined && listing_id !== undefined){
 
             response.status="error";
             response.error_code = "2011";
@@ -205,7 +267,7 @@ var request = {
 
         }else{
 
-            mongo.getRequestDetails(request_id,vendor_id,function(err,requestData){
+            mongo.getRequestDetails(request_id,vendor_id,listing_id,function(err,requestData){
 
                 if(err){
                     next(err);
@@ -222,6 +284,11 @@ var request = {
                             requestData.pp_price = notified_vendors.pp_price;
                             requestData.type=notified_vendors.type;
                         }
+                        requestData.userName=requestData.user_details.name;
+                        requestData.subcategory = notified_vendors.subcategory;
+                        requestData.category_id = notified_vendors.category_id;
+
+                        delete requestData.user_details;
                         delete requestData.notified_vendors;
                         response.data = requestData;
                         res.json(response);
@@ -245,7 +312,9 @@ var request = {
         var request_id = req.body.request || undefined;
         var price = req.body.price || undefined;
         var action = req.body.action || undefined;
-        var type = req.body.type || undefined;
+        var type = req.body.type || "";
+        var category = req.body.category;
+        var listing= req.body.listing;
         if(vendor_id === undefined && request_id !== undefined && action !== undefined){
 
             response.statusCode=200;
@@ -279,7 +348,12 @@ var request = {
 
             var query = {
                 "request_id":request_id,
-                "notified_vendors.vendor_id":parseInt(vendor_id)
+                "notified_vendors":{
+                    $elemMatch:{
+                        vendor_id : parseInt(vendor_id),
+                        listing_id : listing
+                    }
+                }
             }
 
 

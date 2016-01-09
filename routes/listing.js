@@ -131,6 +131,128 @@ var listing = {
         }
 
     },
+    getListingDetailsNew :function (req, res, next) {
+
+        var response = {
+            status: ""
+        }
+
+        var vendor_id = req.query.vendor || undefined;
+        if (vendor_id === undefined) {
+
+            response.statusCode = 200;
+            response.status = "error";
+            response.error_code = "2004",
+                response.error_msg = constants.messages['2004']
+            res.json(response);
+        } else {
+
+            var config = {
+                "LISTINGS":[],
+                "CATEGORIES":[],
+                "SUB_TYPES":[],
+                "AMENITIES":[],
+                "LATEST_VERSION":1,
+                "FORCE_UPGRADE":false,
+                "SHOW_UPDATE_MESSAGE":false,
+                "SHOW_LIST_BUSINESS":true
+
+            };
+
+
+            var listing_id = req.body.listing_id || undefined;
+
+            async.parallel([
+
+
+                function(callback){
+
+                    mysqlDB.getAllCategories(function(err,categories){
+                        if(err)
+                            return callback(err)
+                        else{
+                            config.CATEGORIES = categories;
+                            callback();
+                        }
+                    })
+
+                },
+                function(callback){
+
+                    mysqlDB.getAllAmenities(function(err,amenities){
+
+                        if(err)
+                            return callback(err);
+                        else {
+                            config.AMENITIES = amenities;
+                            callback();
+
+                        }
+                    });
+
+
+                },
+                function(callback){
+
+                    mysqlDB.getAllSubtypes(function(err,subtypes){
+
+                        if(err)
+                            return callback(err);
+                        else {
+                            config.SUB_TYPES = subtypes;
+                            callback();
+                        }
+
+                    });
+
+                }
+                ,
+                function(callback){
+
+                    var query = {
+                        vendor_id: parseInt(vendor_id)
+                    }
+                    mongo.getVendorListing(query, function (err, listingData) {
+                        if (err)
+                            next(err);
+                        else {
+                            if(listingData !==null){
+                                listingData.forEach(function(eachListingData){
+                                      eachListingData.location=eachListingData.city +', '+ eachListingData.state+', '+eachListingData.state;
+
+                                })
+
+                                config.LISTINGS = listingData;
+                            }else{
+                                //config.LISTING =[];
+
+                            }
+                            callback();
+                        }
+                    });
+
+
+                }
+
+
+            ],function(err){
+
+                if(err)
+                    next(err);
+
+                response.statusCode = 200;
+                response.status = "success";
+                response.data=config;
+                res.json(response);
+
+            });
+
+
+
+
+        }
+
+    },
     createListing: function (req, res, next) {
 
         var response = {
@@ -234,6 +356,7 @@ var listing = {
         var lat = req.body.lat || undefined;
         var long = req.body.long || undefined;
         var timingtype = null;
+        var bussiness_name = req.body.bname || undefined;
 
         var query={
             "latitude":lat,
@@ -242,6 +365,7 @@ var listing = {
             "category":category,
             "subcategory":subtype,
             "subcategory_id":subtype_id,
+            "name":bussiness_name,
             "images":[],
             "status":"active"
         }
@@ -251,13 +375,13 @@ var listing = {
             var checkin = req.body.checkin || undefined;
             var checkout = req.body.checkout || undefined;
             var starrating = req.body.star || undefined;
-            var rooms = req.body.rooms || undefined;
+            var rooms = req.body.prices || undefined;
             rooms = JSON.parse(rooms);
             var list_rooms = [];
             var keys = Object.keys(rooms), len = keys.length;
             for(var i = 0 ; i < len ; i++){
                 var each_room= {};
-                each_room.room_type= keys[i];
+                each_room.name= keys[i];
                 each_room.price = rooms[keys[i]];
                 list_rooms.push(each_room);
             }
@@ -267,18 +391,18 @@ var listing = {
             query.check_in=checkin;
             query.check_out=checkout;
             query.star_rating=starrating;
-            query.room_types=list_rooms;
+            query.prices=list_rooms;
             query.amenities = amenities;
 
 
 
 
-        }else if (category_id === 2){
+        }else if (category_id === 2) {
 
             var timing_type_id = parseInt(req.body.timingtype);
-            if(timing_type_id == 1){
+            if (timing_type_id == 1) {
                 timingtype = "Same time";
-            }else{
+            } else {
                 timingtype = "Multiple timings";
             }
 
@@ -295,18 +419,33 @@ var listing = {
             var weekpricing = req.body.weekpricing;
             var activity_name = req.body.activity_name;
             var inclusions = req.body.inclusions;
-            query.timing_type_id=timing_type_id;
-            query.timingtype=timingtype;
-            query.timings=timings;
-            query.prefect_for=prefect_for;
-            query.days=days;
-            query.duration=duration;
+            query.timing_type_id = timing_type_id;
+            query.timingtype = timingtype;
+            query.timings = timings;
+            query.prefect_for = prefect_for;
+            query.days = days;
+            query.duration = duration;
             query.pricing = pricing;
             query.weekpricing = weekpricing;
             query.activity_name = activity_name;
-            query.inclusions=inclusions;
+            query.inclusions = inclusions;
 
             var prices = req.body.activity_prices || undefined;
+            prices = JSON.parse(prices);
+            var list_prices = [];
+            var keys = Object.keys(prices), len = keys.length;
+            for (var i = 0; i < len; i++) {
+                var each_price = {};
+                each_price.name = keys[i];
+                each_price.price = prices[keys[i]];
+                list_prices.push(each_price);
+            }
+            query.prices = list_prices;
+        }else if(category_id ==3 || category_id ==4 ){
+
+            var duration = req.body.duration;
+            var inclusions = req.body.inclusions;
+            var prices = req.body.prices;
             prices = JSON.parse(prices);
             var list_prices = [];
             var keys = Object.keys(prices), len = keys.length;
@@ -316,6 +455,8 @@ var listing = {
                 each_price.price = prices[keys[i]];
                 list_prices.push(each_price);
             }
+            query.inclusions = inclusions;
+            query.duration = duration;
             query.prices = list_prices;
 
         }
@@ -487,7 +628,6 @@ var listing = {
             query.vendor_id=parseInt(vendor_id);
             query.vendor_details=vendor_obj;
             query.created_at= current_time;
-            query.modified_at=current_time;
             query.updated_at=current_time;
             mongo.createListing(query,function(err,success){
 
