@@ -71,7 +71,7 @@ var request = {
 
                                     if (eachNVendors.best_price) {
                                         var best = eachNVendors.best_price;
-                                        request.best_offer = best.toString();
+                                        request.best_offer =  best.toString();
                                     } else {
                                         request.best_offer = "na";
                                     }
