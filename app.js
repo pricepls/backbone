@@ -31,7 +31,7 @@ if(process.env.ENVIORNMENT =='development'){
     configs=configFile.development;
 
 }else{
-
+    logger.level = 'debug';
     //app.use(logger('short'));
     configs=configFile.production;
 
