@@ -30,7 +30,9 @@ var request = {
                 }
                 /* query using dot operator need to validate the performance of both  */
 
-                //"notified_vendors.vendor_id":parseInt(vendor_id)
+                /*"notified_vendors.vendor_id":parseInt(vendor_id),
+                "notified_vendors.pp_price":{ $exists : false },
+                "notified_vendors.status":{ $exists : false }*/
             }
 
             var projection = {
@@ -58,29 +60,40 @@ var request = {
                         async.forEach(requests,function(eachrequest,callback){
 
                             (function (each) {
+
+                                logger.info("getNewrequests ","count "+each.notified_vendors.length);
+
                                 each.notified_vendors.forEach(function (eachNVendors) {
-                                    var request = {};
-                                    var request = JSON.parse(JSON.stringify(each));
-                                    request.name = each.user_details.name;
-                                    request.listing_id = eachNVendors.listing_id;
-                                    request.subcategory = eachNVendors.subcategory;
-                                    request.category_id = eachNVendors.category_id;
 
-                                    request.subcategory_id = eachNVendors.subtype_id;
-                                    request.unique_id = request.request_id+ "##$$"+eachNVendors.listing_id;
+                                    logger.log("debug","getNewrequests "+"vendor_id "+parseInt(eachNVendors.vendor_id) +"requested vendor id "+vendor_id)
 
-                                    if (eachNVendors.best_price) {
-                                        var best = eachNVendors.best_price;
-                                        request.best_offer =  best.toString();
-                                    } else {
-                                        request.best_offer = "na";
+                                    if(parseInt(eachNVendors.vendor_id) == vendor_id) {
+
+                                        logger.log("debug","getNewrequests "+eachNVendors.vendor_id);
+
+                                        var request = {};
+                                        var request = JSON.parse(JSON.stringify(each));
+                                        request.name = each.user_details.name;
+                                        request.listing_id = eachNVendors.listing_id;
+                                        request.subcategory = eachNVendors.subcategory;
+                                        request.category_id = eachNVendors.category_id;
+
+                                        request.subcategory_id = eachNVendors.subtype_id;
+                                        request.unique_id = request.request_id + "##$$" + eachNVendors.listing_id;
+
+                                        if (eachNVendors.best_price) {
+                                            var best = eachNVendors.best_price;
+                                            request.best_offer = "BEST OFFER Rs." + best.toString();
+                                        } else {
+                                            request.best_offer = "NO BEST OFFERS YET !";
+                                        }
+                                        request.updated_at = each.updated_at.toString();
+
+                                        delete request.notified_vendors;
+                                        delete request.user_details;
+                                        requests_obj.push(request);
+
                                     }
-                                    request.updated_at = each.updated_at.toString();
-
-                                    delete request.notified_vendors;
-                                    delete request.user_details;
-                                    requests_obj.push(request);
-
                                 })
                             })(eachrequest)
 
@@ -104,6 +117,8 @@ var request = {
                         });
 
                     }else{
+
+                        logger.info("newRequests "+JSON.stringify(requests_obj));
 
                         response.statusCode=200;
                         response.status="success";
@@ -176,28 +191,40 @@ var request = {
 
 
                             (function (each) {
+
+                                logger.info("repliedRequests ","count "+each.notified_vendors.length);
+
+
                                 each.notified_vendors.forEach(function (eachNVendors) {
-                                    var request = {};
-                                    var request = JSON.parse(JSON.stringify(each));
-                                    request.name = each.user_details.name;
-                                    request.listing_id = eachNVendors.listing_id;
-                                    request.subcategory = eachNVendors.subcategory;
-                                    request.category_id = eachNVendors.category_id;
 
-                                    request.subcategory_id = eachNVendors.subtype_id;
-                                    request.unique_id = request.request_id+ "##$$"+eachNVendors.listing_id;
 
-                                    if (eachNVendors.best_price) {
-                                        var best = eachNVendors.best_price;
-                                        request.best_offer = best.toString();
-                                    } else {
-                                        request.best_offer = "na";
+                                    logger.log("debug","repliedRequests "+"vendor_id "+parseInt(eachNVendors.vendor_id) +"requested vendor id "+vendor_id)
+                                    if(parseInt(eachNVendors.vendor_id) == vendor_id) {
+
+                                        logger.log("debug","repliedRequests "+eachNVendors.vendor_id);
+
+                                        var request = {};
+                                        var request = JSON.parse(JSON.stringify(each));
+                                        request.name = each.user_details.name;
+                                        request.listing_id = eachNVendors.listing_id;
+                                        request.subcategory = eachNVendors.subcategory;
+                                        request.category_id = eachNVendors.category_id;
+
+                                        request.subcategory_id = eachNVendors.subtype_id;
+                                        request.unique_id = request.request_id + "##$$" + eachNVendors.listing_id;
+
+                                        if (eachNVendors.best_price) {
+                                            var best = eachNVendors.best_price;
+                                            request.best_offer = "BEST OFFER Rs." + best.toString();
+                                        } else {
+                                            request.best_offer = "NO BEST OFFERS YET !";
+                                        }
+                                        request.updated_at = each.updated_at.toString();
+
+                                        delete request.notified_vendors;
+                                        delete request.user_details;
+                                        requests_obj.push(request);
                                     }
-                                    request.updated_at = each.updated_at.toString();
-
-                                    delete request.notified_vendors;
-                                    delete request.user_details;
-                                    requests_obj.push(request);
 
                                 })
                             })(eachrequest)
@@ -221,6 +248,8 @@ var request = {
                             //callback();
 
                         },function(err){
+
+                            logger.info("repliedRequests "+JSON.stringify(requests_obj))
 
                             response.statusCode=200;
                             response.status="success";
@@ -277,9 +306,9 @@ var request = {
 
                         var notified_vendors = requestData.notified_vendors[0];
                         if(notified_vendors.best_price)
-                            requestData.best_offer=notified_vendors.best_price;
+                            requestData.best_offer="BEST OFFER Rs." +notified_vendors.best_price;
                         else
-                            requestData.best_offer='na';
+                            requestData.best_offer='NO BEST OFFERS YET !';
                         if(notified_vendors.pp_price){
                             requestData.pp_price = notified_vendors.pp_price;
                             requestData.type=notified_vendors.type;

@@ -24,7 +24,9 @@ var booking = {
                 booking_id:1,
                 user_details:1,
                 no_of_nights:1,
-                requested_date:1
+                requested_date:1,
+                booking_number:1,
+                subcategory:1
 
             }
 
@@ -108,7 +110,9 @@ var booking = {
                     if(bookingData !==null){
 
                         response.status="success";
-                        response.data = bookingData[0];
+                        bookingData.bname = bookingData.hotel_details.vendor_details.name;
+                        delete bookingData.hotel_details;
+                        response.data = bookingData;
                         res.json(response);
                     }else{
 

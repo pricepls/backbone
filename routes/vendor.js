@@ -12,11 +12,14 @@ var neo4j = require('../lib/neo');
 var moment=require('moment');
 var spruce = require('spruce').init();
 
+
 mysqlDB.init();
 
 var vendor={
 
     login:function(req,res,next){
+
+        logger.log('info','login '+JSON.stringify(req.body));
 
         var phone=req.body.phone || undefined;
         var password=req.body.password || undefined;
@@ -58,7 +61,7 @@ var vendor={
                                 response.statusCode=200;
                                 response.status="success";
 
-                                spruce.info("login ph:"+phone+ "listing "+vendor.listing_id);
+                                logger.log('info',"login ph: "+phone+ "listing "+vendor.listing_id);
 
                                 response.data=vendor;
                                 res.json(response);
@@ -71,7 +74,7 @@ var vendor={
                         response.status="error";
                         response.error_code="1002";
                         response.error_msg=constants.messages['1002'];
-                        spruce.info("login ph:"+phone +" RESPONSE "+JSON.stringify(response));
+                        logger.log('info',"login ph:"+phone +" RESPONSE "+JSON.stringify(response));
                         res.json(response);
 
                     }
@@ -148,13 +151,14 @@ var vendor={
     },
     addGCMToken : function(req,res,next){
 
+        logger.log('info','addGCMToken '+JSON.stringify(req.body));
+
         var listing_id  = req.body.listing_id || undefined;
         var vendor_id = req.body.vendor_id || undefined;
         var gcm_token = req.body.gcm_token || undefined;
         var response={
             status:""
         }
-        spruce.info("addGCMToken listing "+listing_id+" vendor_id "+vendor_id);
         if(vendor_id !== undefined){
 
             mongo.saveGCMToken(vendor_id,gcm_token,function(err,status){
@@ -397,6 +401,8 @@ var vendor={
     },
     checkAccountActive :function(req,res,next){
 
+        logger.log('info','checkAccountActive-req-body '+JSON.stringify(req.query));
+
         var vendor_id = req.query.vendor_id || undefined;
         var app_version = req.query.app_version || undefined;
         var response = { status:'' };
@@ -424,7 +430,7 @@ var vendor={
                     }
                     response.status='success';
                     response.data = status_obj;
-                    spruce.info("checkAccountActive vendor_id "+vendor_id +"  RESPONSE "+JSON.stringify(response));
+                    logger.log('info',"checkAccountActive vendor_id "+vendor_id +"  RESPONSE "+JSON.stringify(response));
                     res.json(response);
                 }
             })

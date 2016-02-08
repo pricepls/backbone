@@ -427,7 +427,7 @@ var listing = {
             query.duration = duration;
             query.pricing = pricing;
             query.weekpricing = weekpricing;
-            query.activity_name = activity_name;
+            //query.activity_name = activity_name;
             query.inclusions = inclusions;
 
             var prices = req.body.activity_prices || undefined;
@@ -637,6 +637,8 @@ var listing = {
                     response.status ="success";
                     response.message = constants.messages['3004'];
                     response.listing_id = listing_id;
+                    response.listing_number = query.listing_number;
+                    response.city=query.city;
                     res.json(response);
                 }
             });
@@ -648,6 +650,7 @@ var listing = {
     newImage : function(req,res,next){
 
         var listing_id = req.body.listing_id || undefined;
+        var listing_number = req.body.listing_number || 0;
         var images = {};
         var response = {
             status:""
@@ -657,15 +660,19 @@ var listing = {
             function(callback){
 
                 var image_path =req.file.path;
-                var public_id = 'listings/'+listing_id+'/image_'+ req.file.originalname;
-                utils.uploadTocloudanary(image_path,public_id,function(imagerslt){
 
-                    if(imagerslt){
+                var public_id = parseInt(listing_number);
+                utils.uploadToS3(req.file.path,req.file,public_id,function(err,imagerslt){
+
+                    if(err)
+                        next(err);
+
+                    else if(imagerslt){
 
                         images.name=shortid.generate();
                         //images.url=imagerslt.url;
-                        images.url=imagerslt.appshow_url;
-                        images.original_url = imagerslt.url;
+                        images.url=imagerslt.Location;
+                        //images.original_url = imagerslt.url;
                         var fs = require('fs');
                         fs.unlinkSync(image_path);
                         callback();

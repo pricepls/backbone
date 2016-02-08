@@ -11,6 +11,9 @@ app=express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+logger = require('winston');
+
+
 
 // error handlers
 
@@ -23,6 +26,7 @@ var configs;
 // reading config based on env
 if(process.env.ENVIORNMENT =='development'){
 
+    logger.level = 'debug';
     //app.use(logger('short'));
     configs=configFile.development;
 
@@ -34,6 +38,8 @@ if(process.env.ENVIORNMENT =='development'){
 }
 // setting the config to make it available everywhere
 app.set('configs',configs);
+
+logger.log('debug','configs'+JSON.stringify(configs));
 
 // loading constants
 
