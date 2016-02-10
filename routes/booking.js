@@ -110,7 +110,7 @@ var booking = {
                     if(bookingData !==null){
 
                         response.status="success";
-                        bookingData.bname = bookingData.hotel_details.vendor_details.name;
+                        bookingData.bname = bookingData.hotel_name;
                         delete bookingData.hotel_details;
                         response.data = bookingData;
                         res.json(response);
