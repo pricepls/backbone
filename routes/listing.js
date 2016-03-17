@@ -689,7 +689,7 @@ var listing = {
                 var image_path = req.file.path;
 
                 var public_id = parseInt(listing_number);
-                utils.(req.file.path, req.file, public_id, function (err, imagerslt) {
+                utils.uploadToS3(req.file.path, req.file, public_id, function (err, imagerslt) {
 
                     if (err)
                         next(err);
