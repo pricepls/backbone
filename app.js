@@ -21,6 +21,7 @@ logger = require('winston');
 // will print stacktrace
 
 var configFile=require('./config.json');
+amenities_configs = require('./amenities.json');
 var configs;
 
 // reading config based on env

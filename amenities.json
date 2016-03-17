@@ -1,0 +1,122 @@
+[
+  {
+    "id":1,
+    "name": "AC",
+    "image": "ac"
+  },
+  {
+    "id":2,
+    "name": "Breakfast",
+    "image": "breakfast"
+  },
+  {
+    "id":3,
+    "name": "TV",
+    "image": "tv"
+  },
+  {
+    "id":4,
+    "name": "Room Service",
+    "image": "roomservice"
+  },
+  {
+    "id":5,
+    "name": "Dryer",
+    "image": "dryer"
+  },
+  {
+    "id":6,
+    "name": "Bathroom Towels",
+    "image": "bathroom_towels"
+  },
+  {
+    "id":7,
+    "name": "Event friendly",
+    "image": "event_friendly"
+  },
+  {
+    "id":8,
+    "name": "Family friendly",
+    "image": "family_friendly"
+  },
+  {
+    "id":9,
+    "name": "Fire place",
+    "image": "fireplace"
+  },
+  {
+    "id":10,
+    "name": "Gym",
+    "image": "gym"
+  },
+  {
+    "id":11,
+    "name": "Handicap",
+    "image": "handicap"
+  },
+  {
+    "id":12,
+    "name": "Heating",
+    "image": "heating"
+  },
+  {
+    "id":13,
+    "name": "Internet",
+    "image": "internet"
+  },
+  {
+    "id":14,
+    "name": "Kitchen",
+    "image": "kitchen"
+  },
+  {
+    "id":15,
+    "name": "Parking",
+    "image": "parking"
+  },
+  {
+    "id":16,
+    "name": "Pets",
+    "image": "pets"
+  },
+  {
+    "id":17,
+    "name": "Pool",
+    "image": "pool"
+  },
+  {
+    "id":18,
+    "name": "Shampoo",
+    "image": "shampoo"
+  },
+  {
+    "id":19,
+    "name": "Smoking Ok",
+    "image": "smokingok"
+  },
+  {
+    "id":20,
+    "name": "Washer",
+    "image": "washer"
+  },
+  {
+    "id":21,
+    "name": "Wifi",
+    "image": "wifi"
+  },
+  {
+    "id":22,
+    "name": "24Hr Check-in",
+    "image": "default"
+  },
+  {
+    "id":23,
+    "name": "lift",
+    "image": "lift"
+  },
+  {
+    "id":24,
+    "name":"Iron",
+    "image":"iron"
+  }
+]
