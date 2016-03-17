@@ -83,7 +83,7 @@ var vendor={
         }
 
     },
-    createVendorcreateVendor:function(req,res,next){
+    createVendor:function(req,res,next){
 
 
         var name=req.body.name || undefined;
