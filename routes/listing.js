@@ -221,18 +221,21 @@ var listing = {
                             if (listingData !== null) {
                                 listingData.forEach(function (eachListingData) {
 
-                                    var amenities_toShow=null;
-                                    var amenities_array = eachListingData.amenities;
-                                    amenities_array.forEach(function(eachOne){
+                                    var amenities_toShow = null;
+                                    var amenities_array = eachListingData.amenities || null;
 
-                                        if(amenities_toShow!== null){
-                                            amenities_toShow+= ","+eachOne.name;
-                                        }else{
-                                            amenities_toShow = eachOne.name;
-                                        }
+                                    if (amenities_array != null) {
+                                        amenities_array.forEach(function (eachOne) {
 
-                                    })
-                                    eachListingData.amenities = amenities_toShow;
+                                            if (amenities_toShow !== null) {
+                                                amenities_toShow += "," + eachOne.name;
+                                            } else {
+                                                amenities_toShow = eachOne.name;
+                                            }
+
+                                        })
+                                        eachListingData.amenities = amenities_toShow;
+                                    }
 
                                     eachListingData.location = eachListingData.city + ', ' + eachListingData.state + ', ' + eachListingData.state;
 
@@ -696,7 +699,7 @@ var listing = {
 
                     else if (imagerslt) {
 
-                        logger.debug("uploadToS3  response "+JSON.stringify(imagerslt));
+                        logger.debug("uploadToS3  response " + JSON.stringify(imagerslt));
                         images.name = shortid.generate();
                         //images.url=imagerslt.url;
                         images.url = imagerslt.Location;
@@ -723,10 +726,10 @@ var listing = {
             if (!err) {
                 response.status = "success";
                 response.message = constants.messages['3005'];
-                images.url = utils.getModifiedImage(images.key,listing_number,'200','200');
+                images.url = utils.getModifiedImage(images.key, listing_number, '200', '200');
                 delete images.original_url;
                 response.data = images;
-                logger.debug("uploadToS3 new images response "+JSON.stringify(response));
+                logger.debug("uploadToS3 new images response " + JSON.stringify(response));
                 res.json(response);
             }
 
