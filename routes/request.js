@@ -356,6 +356,8 @@ var request = {
 
         }else{
 
+            logger.info("newPrice vendorID "+vendor_id +" Request ID "+request_id+" Price "+JSON.stringify(price));
+
             var current_time = new Date().getTime();
             var success_msg = constants.messages['3001'];
 
@@ -374,6 +376,9 @@ var request = {
                     each_quote.price = price[keys[i]];
                     quoted_price.push(each_quote);
                 }
+
+                logger.debug("newPrice quoted price "+JSON.stringify(quoted_price));
+
                 var operator ={$set:{"notified_vendors.$.pp_price":quoted_price,"notified_vendors.$.status":"accepted","notified_vendors.$.type":type,updated_at:current_time}}
            }
 
