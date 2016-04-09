@@ -696,9 +696,11 @@ var listing = {
 
                     else if (imagerslt) {
 
+                        logger.debug("uploadToS3  response "+JSON.stringify(imagerslt));
                         images.name = shortid.generate();
                         //images.url=imagerslt.url;
                         images.url = imagerslt.Location;
+                        images.key = imagerslt.key;
                         //images.original_url = imagerslt.url;
                         var fs = require('fs');
                         fs.unlinkSync(image_path);
@@ -721,8 +723,10 @@ var listing = {
             if (!err) {
                 response.status = "success";
                 response.message = constants.messages['3005'];
+                images.url = utils.getModifiedImage(images.key,listing_number,'200','200');
                 delete images.original_url;
                 response.data = images;
+                logger.debug("uploadToS3 new images response "+JSON.stringify(response));
                 res.json(response);
             }
 
