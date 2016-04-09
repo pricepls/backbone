@@ -374,7 +374,8 @@ var request = {
                     var each_quote= {};
                     each_quote.room_type= keys[i];
                     each_quote.price = price[keys[i]];
-                    quoted_price.push(each_quote);
+                    if(price[keys[i]] && price[keys[i]] !="" && price[keys[i]] !=undefined)
+                        quoted_price.push(each_quote);
                 }
 
                 logger.debug("newPrice quoted price "+JSON.stringify(quoted_price));
