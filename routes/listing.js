@@ -1,10 +1,10 @@
-var express=require('express');
-var async=require('async');
-var constants=app.get('constants');
-var mysqlDB=require('../lib/mysqldb')();
-var mongo=require('../lib/mongodb');
+var express = require('express');
+var async = require('async');
+var constants = app.get('constants');
+var mysqlDB = require('../lib/mysqldb')();
+var mongo = require('../lib/mongodb');
 var request = require('../lib/request');
-var shortid= require('shortid');
+var shortid = require('shortid');
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
 var configs = app.get('configs');
 var utils = require('../lib/util');
@@ -31,14 +31,14 @@ var listing = {
         } else {
 
             var config = {
-                "LISTING":{},
-                "CATEGORIES":[],
-                "SUB_TYPES":[],
-                "AMENITIES":[],
-                "LATEST_VERSION":1,
-                "FORCE_UPGRADE":false,
-                "SHOW_UPDATE_MESSAGE":false,
-                "SHOW_LIST_BUSINESS":false
+                "LISTING": {},
+                "CATEGORIES": [],
+                "SUB_TYPES": [],
+                "AMENITIES": [],
+                "LATEST_VERSION": 1,
+                "FORCE_UPGRADE": false,
+                "SHOW_UPDATE_MESSAGE": false,
+                "SHOW_LIST_BUSINESS": false
             };
 
 
@@ -47,23 +47,23 @@ var listing = {
             async.parallel([
 
 
-                function(callback){
+                function (callback) {
 
-                    mysqlDB.getAllCategories(function(err,categories){
-                        if(err)
+                    mysqlDB.getAllCategories(function (err, categories) {
+                        if (err)
                             return callback(err)
-                        else{
+                        else {
                             config.CATEGORIES = categories;
                             callback();
                         }
                     })
 
                 },
-                function(callback){
+                function (callback) {
 
-                    mysqlDB.getAllAmenities(function(err,amenities){
+                    mysqlDB.getAllAmenities(function (err, amenities) {
 
-                        if(err)
+                        if (err)
                             return callback(err);
                         else {
                             config.AMENITIES = amenities;
@@ -74,11 +74,11 @@ var listing = {
 
 
                 },
-                function(callback){
+                function (callback) {
 
-                    mysqlDB.getAllSubtypes(function(err,subtypes){
+                    mysqlDB.getAllSubtypes(function (err, subtypes) {
 
-                        if(err)
+                        if (err)
                             return callback(err);
                         else {
                             config.SUB_TYPES = subtypes;
@@ -89,7 +89,7 @@ var listing = {
 
                 }
                 ,
-                function(callback){
+                function (callback) {
 
                     var query = {
                         vendor_id: parseInt(vendor_id)
@@ -98,11 +98,11 @@ var listing = {
                         if (err)
                             next(err);
                         else {
-                            if(listingData !==null){
-                                listingData.location=listingData.city +', '+ listingData.state+', '+listingData.state;
+                            if (listingData !== null) {
+                                listingData.location = listingData.city + ', ' + listingData.state + ', ' + listingData.state;
                                 config.LISTING = listingData;
-                            }else{
-                                config.LISTING ={};
+                            } else {
+                                config.LISTING = {};
                                 config.SHOW_LIST_BUSINESS = true;
                             }
                             callback();
@@ -113,25 +113,23 @@ var listing = {
                 }
 
 
-            ],function(err){
+            ], function (err) {
 
-                if(err)
+                if (err)
                     next(err);
 
                 response.statusCode = 200;
                 response.status = "success";
-                response.data=config;
+                response.data = config;
                 res.json(response);
 
             });
 
 
-
-
         }
 
     },
-    getListingDetailsNew :function (req, res, next) {
+    getListingDetailsNew: function (req, res, next) {
 
         var response = {
             status: ""
@@ -148,14 +146,14 @@ var listing = {
         } else {
 
             var config = {
-                "LISTINGS":[],
-                "CATEGORIES":[],
-                "SUB_TYPES":[],
-                "AMENITIES":[],
-                "LATEST_VERSION":1,
-                "FORCE_UPGRADE":false,
-                "SHOW_UPDATE_MESSAGE":false,
-                "SHOW_LIST_BUSINESS":true
+                "LISTINGS": [],
+                "CATEGORIES": [],
+                "SUB_TYPES": [],
+                "AMENITIES": [],
+                "LATEST_VERSION": 1,
+                "FORCE_UPGRADE": false,
+                "SHOW_UPDATE_MESSAGE": false,
+                "SHOW_LIST_BUSINESS": true
 
             };
 
@@ -165,38 +163,42 @@ var listing = {
             async.parallel([
 
 
-                function(callback){
+                function (callback) {
 
-                    mysqlDB.getAllCategories(function(err,categories){
-                        if(err)
+                    mysqlDB.getAllCategories(function (err, categories) {
+                        if (err)
                             return callback(err)
-                        else{
+                        else {
                             config.CATEGORIES = categories;
                             callback();
                         }
                     })
 
                 },
-                function(callback){
+                function (callback) {
 
-                    mysqlDB.getAllAmenities(function(err,amenities){
+                    /*mysqlDB.getAllAmenities(function(err,amenities){
 
-                        if(err)
-                            return callback(err);
-                        else {
-                            config.AMENITIES = amenities;
-                            callback();
+                     if(err)
+                     return callback(err);
+                     else {
+                     config.AMENITIES = amenities;
+                     callback();
 
-                        }
-                    });
+                     }
+                     });*/
+
+
+                    config.AMENITIES = amenities_configs;
+                    callback();
 
 
                 },
-                function(callback){
+                function (callback) {
 
-                    mysqlDB.getAllSubtypes(function(err,subtypes){
+                    mysqlDB.getAllSubtypes(function (err, subtypes) {
 
-                        if(err)
+                        if (err)
                             return callback(err);
                         else {
                             config.SUB_TYPES = subtypes;
@@ -207,7 +209,7 @@ var listing = {
 
                 }
                 ,
-                function(callback){
+                function (callback) {
 
                     var query = {
                         vendor_id: parseInt(vendor_id)
@@ -216,14 +218,28 @@ var listing = {
                         if (err)
                             next(err);
                         else {
-                            if(listingData !==null){
-                                listingData.forEach(function(eachListingData){
-                                      eachListingData.location=eachListingData.city +', '+ eachListingData.state+', '+eachListingData.state;
+                            if (listingData !== null) {
+                                listingData.forEach(function (eachListingData) {
+
+                                    var amenities_toShow=null;
+                                    var amenities_array = eachListingData.amenities;
+                                    amenities_array.forEach(function(eachOne){
+
+                                        if(amenities_toShow!== null){
+                                            amenities_toShow+= ","+eachOne.name;
+                                        }else{
+                                            amenities_toShow = eachOne.name;
+                                        }
+
+                                    })
+                                    eachListingData.amenities = amenities_toShow;
+
+                                    eachListingData.location = eachListingData.city + ', ' + eachListingData.state + ', ' + eachListingData.state;
 
                                 })
 
                                 config.LISTINGS = listingData;
-                            }else{
+                            } else {
                                 //config.LISTING =[];
 
                             }
@@ -235,19 +251,17 @@ var listing = {
                 }
 
 
-            ],function(err){
+            ], function (err) {
 
-                if(err)
+                if (err)
                     next(err);
 
                 response.statusCode = 200;
                 response.status = "success";
-                response.data=config;
+                response.data = config;
                 res.json(response);
 
             });
-
-
 
 
         }
@@ -343,34 +357,33 @@ var listing = {
 
 
     },
-    newListing : function(req,res,next){
+    newListing: function (req, res, next) {
 
         var response = {
-            status:""
+            status: ""
         }
-        console.log(req.body);
         var category_id = parseInt(req.body.category_id) || undefined;
         var category = req.body.category || undefined;
         var subtype_id = parseInt(req.body.subtype_id) || undefined;
-        var subtype=req.body.subtype || undefined;
+        var subtype = req.body.subtype || undefined;
         var lat = req.body.lat || undefined;
         var long = req.body.long || undefined;
         var timingtype = null;
         var bussiness_name = req.body.bname || undefined;
 
-        var query={
-            "latitude":lat,
-            "longitude":long,
-            "category_id":category_id,
-            "category":category,
-            "subcategory":subtype,
-            "subcategory_id":subtype_id,
-            "name":bussiness_name,
-            "images":[],
-            "status":"active"
+        var query = {
+            "latitude": lat,
+            "longitude": long,
+            "category_id": category_id,
+            "category": category,
+            "subcategory": subtype,
+            "subcategory_id": subtype_id,
+            "name": bussiness_name,
+            "images": [],
+            "status": "active"
         }
 
-        if(category_id === 1){
+        if (category_id === 1) {
 
             var checkin = req.body.checkin || undefined;
             var checkout = req.body.checkout || undefined;
@@ -379,25 +392,39 @@ var listing = {
             rooms = JSON.parse(rooms);
             var list_rooms = [];
             var keys = Object.keys(rooms), len = keys.length;
-            for(var i = 0 ; i < len ; i++){
-                var each_room= {};
-                each_room.name= keys[i];
+            for (var i = 0; i < len; i++) {
+                var each_room = {};
+                each_room.name = keys[i];
                 each_room.price = rooms[keys[i]];
                 list_rooms.push(each_room);
             }
             var amenities = req.body.amenities || undefined;
 
+            var amenities_toSave = [];
+            if (amenities !== undefined) {
+                var amenities_array = amenities.split(',');
+                amenities_array.forEach(function (each_amenity) {
 
-            query.check_in=checkin;
-            query.check_out=checkout;
-            query.star_rating=starrating;
-            query.prices=list_rooms;
-            query.amenities = amenities;
+                    amenities_configs.forEach(function (eachAmenity) {
+
+                        if (eachAmenity.name === each_amenity) {
+                            amenities_toSave.push(eachAmenity);
+                        }
+                    })
 
 
+                })
+            }
 
 
-        }else if (category_id === 2) {
+            query.check_in = checkin;
+            query.check_out = checkout;
+            query.star_rating = starrating;
+            query.prices = list_rooms;
+            query.amenities = amenities_toSave;
+
+
+        } else if (category_id === 2) {
 
             var timing_type_id = parseInt(req.body.timingtype);
             if (timing_type_id == 1) {
@@ -441,7 +468,7 @@ var listing = {
                 list_prices.push(each_price);
             }
             query.prices = list_prices;
-        }else if(category_id ==3 || category_id ==4 ){
+        } else if (category_id == 3 || category_id == 4) {
 
             var duration = req.body.duration;
             var inclusions = req.body.inclusions;
@@ -449,9 +476,9 @@ var listing = {
             prices = JSON.parse(prices);
             var list_prices = [];
             var keys = Object.keys(prices), len = keys.length;
-            for(var i = 0 ; i < len ; i++){
-                var each_price= {};
-                each_price.name= keys[i];
+            for (var i = 0; i < len; i++) {
+                var each_price = {};
+                each_price.name = keys[i];
                 each_price.price = prices[keys[i]];
                 list_prices.push(each_price);
             }
@@ -470,7 +497,7 @@ var listing = {
         var state_short = undefined;
         var vendor_id = req.body.vendor || undefined;
         var current_time = new Date().getTime();
-        var listing_id ="PPL_"+shortid.generate();
+        var listing_id = "PPL_" + shortid.generate();
         var vendor_obj = {};
         var location = req.body.location || undefined;
         var area = undefined;
@@ -516,19 +543,19 @@ var listing = {
             //},
 
 
-            function(callback){
+            function (callback) {
 
-                if(location !== undefined && location.split(',').length >= 3) {
+                if (location !== undefined && location.split(',').length >= 3) {
                     var location_split = location.split(',');
-                    var length = location_split.length-1;
+                    var length = location_split.length - 1;
 
-                    city = location_split[length-2].trim();
-                    state = location_split[length-1].trim();
+                    city = location_split[length - 2].trim();
+                    state = location_split[length - 1].trim();
                     state_short = state.substr(0, 2);
                     country = location_split[length].trim();
                     country_short = country.substr(0, 2);
-                    if(length > 3){
-                        area = location_split[length-3].trim();
+                    if (length > 3) {
+                        area = location_split[length - 3].trim();
                     }
                     mysqlDB.newCounty(country, country_short, function (err, id) {
                         if (!err)
@@ -544,7 +571,7 @@ var listing = {
                         });
                     });
 
-                }else {
+                } else {
 
                     var geocode_url = configs.google.geocode_url;
                     var geocode_key = configs.google.geocode_key;
@@ -589,13 +616,13 @@ var listing = {
 
                 }
             },
-            function(callback){
+            function (callback) {
 
-                mysqlDB.findVendorById(vendor_id,function(err,vendor){
+                mysqlDB.findVendorById(vendor_id, function (err, vendor) {
 
-                    if(err)
+                    if (err)
                         return callback(err);
-                    if(vendor !== undefined){
+                    if (vendor !== undefined) {
 
                         vendor_obj.name = vendor.name;
                         vendor_obj.phone = vendor.phone.toString();
@@ -604,10 +631,10 @@ var listing = {
                     callback();
                 });
             },
-            function(callback){
+            function (callback) {
 
-                utils.getNextSequenceNumber("listing",function(err,number){
-                    if(err)
+                utils.getNextSequenceNumber("listing", function (err, number) {
+                    if (err)
                         return callback(err);
                     else
                         query.listing_number = number;
@@ -617,28 +644,28 @@ var listing = {
 
             }
 
-        ],function(err){
+        ], function (err) {
 
-            query.listing_id=listing_id;
-            query.area=area;
-            query.city_id=city_id;
-            query.city=city;
-            query.state=state;
-            query.country=country;
-            query.vendor_id=parseInt(vendor_id);
-            query.vendor_details=vendor_obj;
-            query.created_at= current_time;
-            query.updated_at=current_time;
-            mongo.createListing(query,function(err,success){
+            query.listing_id = listing_id;
+            query.area = area;
+            query.city_id = city_id;
+            query.city = city;
+            query.state = state;
+            query.country = country;
+            query.vendor_id = parseInt(vendor_id);
+            query.vendor_details = vendor_obj;
+            query.created_at = current_time;
+            query.updated_at = current_time;
+            mongo.createListing(query, function (err, success) {
 
-                if(err)
+                if (err)
                     next(err);
-                else{
-                    response.status ="success";
+                else {
+                    response.status = "success";
                     response.message = constants.messages['3004'];
                     response.listing_id = listing_id;
                     response.listing_number = query.listing_number;
-                    response.city=query.city;
+                    response.city = query.city;
                     res.json(response);
                 }
             });
@@ -647,31 +674,33 @@ var listing = {
 
 
     },
-    newImage : function(req,res,next){
+    newImage: function (req, res, next) {
 
         var listing_id = req.body.listing_id || undefined;
         var listing_number = req.body.listing_number || 0;
         var images = {};
         var response = {
-            status:""
+            status: ""
         };
         async.series([
 
-            function(callback){
+            function (callback) {
 
-                var image_path =req.file.path;
+                var image_path = req.file.path;
 
                 var public_id = parseInt(listing_number);
-                utils.uploadToS3(req.file.path,req.file,public_id,function(err,imagerslt){
+                utils.uploadToS3(req.file.path, req.file, public_id, function (err, imagerslt) {
 
-                    if(err)
+                    if (err)
                         next(err);
 
-                    else if(imagerslt){
+                    else if (imagerslt) {
 
-                        images.name=shortid.generate();
+                        logger.debug("uploadToS3  response "+JSON.stringify(imagerslt));
+                        images.name = shortid.generate();
                         //images.url=imagerslt.url;
-                        images.url=imagerslt.Location;
+                        images.url = imagerslt.Location;
+                        images.key = imagerslt.key;
                         //images.original_url = imagerslt.url;
                         var fs = require('fs');
                         fs.unlinkSync(image_path);
@@ -679,119 +708,121 @@ var listing = {
                     }
                 });
             },
-            function(callback){
+            function (callback) {
 
-                mongo.updateImage(images,listing_id,function(err,status){
-                    if(err)
+                mongo.updateImage(images, listing_id, function (err, status) {
+                    if (err)
                         return callback(err);
                     callback();
 
                 });
             }
 
-        ],function(err){
+        ], function (err) {
 
-            if(!err){
-                response.status="success";
-                response.message=constants.messages['3005'];
+            if (!err) {
+                response.status = "success";
+                response.message = constants.messages['3005'];
+                images.url = utils.getModifiedImage(images.key,listing_number,'200','200');
                 delete images.original_url;
                 response.data = images;
+                logger.debug("uploadToS3 new images response "+JSON.stringify(response));
                 res.json(response);
             }
 
         });
     }
     ,
-    deleteImage : function(req,res,next){
+    deleteImage: function (req, res, next) {
 
         var listing_id = req.body.listing_id || undefined;
         var image_id = req.body.image_id || undefined;
         var response = {
-            status : ""
+            status: ""
         }
 
-        mongo.deleteImage(image_id,listing_id,function(err,status){
+        mongo.deleteImage(image_id, listing_id, function (err, status) {
 
-            if(err)
+            if (err)
                 next(err);
-            else{
+            else {
 
-                response.status="success";
-                response.message=constants.messages['3006'];
+                response.status = "success";
+                response.message = constants.messages['3006'];
                 res.json(response);
             }
 
         });
 
     },
-    deleteMultiImages : function(req,res,next){
+    deleteMultiImages: function (req, res, next) {
 
         var listing_id = req.body.listing_id || undefined;
         var image_ids = req.body.image_ids || undefined;
         var response = {
-            status : ""
+            status: ""
         }
-        image_ids=image_ids.split(',');
-        if(image_ids.length >0 ){
+        image_ids = image_ids.split(',');
+        if (image_ids.length > 0) {
 
-            async.forEach(image_ids,function(image_id,callback){
+            async.forEach(image_ids, function (image_id, callback) {
 
-                mongo.deleteImage(image_id,listing_id,function(err,status){
+                mongo.deleteImage(image_id, listing_id, function (err, status) {
 
-                    if(err)
+                    if (err)
                         return callback(err);
-                    else{
+                    else {
 
                         callback();
                     }
 
                 });
 
-            },function(err){
+            }, function (err) {
 
-                response.status="success";
-                response.message=constants.messages['3006'];
+                response.status = "success";
+                response.message = constants.messages['3006'];
                 res.json(response);
             })
         }
 
     },
-    removeListing : function(req,res,next){
+    removeListing: function (req, res, next) {
 
         var listing_id = req.body.listing_id || undefined;
         var vendor_id = req.body.vendor_id || undefined;
         var response = {
-            status : ''
+            status: ''
         }
-        if(listing_id !== undefined  && vendor_id !== undefined){
+        if (listing_id !== undefined && vendor_id !== undefined) {
 
-            vendor_id=parseInt(vendor_id);
-            mongo.checkListingMatches(listing_id,vendor_id,function(err,status){
+            vendor_id = parseInt(vendor_id);
+            mongo.checkListingMatches(listing_id, vendor_id, function (err, status) {
 
-                if(err)
+                if (err)
                     next(err);
-                else{
-                    if(status){
+                else {
+                    if (status) {
 
-                        mongo.removeListing(listing_id,vendor_id,function(err,status){
+                        mongo.removeListing(listing_id, vendor_id, function (err, status) {
 
-                            if(err){
+                            if (err) {
                                 next(err);
-                            }else{
+                            } else {
 
-                                response.status='success';
-                                response.message=constants.messages['3007'];
+                                response.status = 'success';
+                                response.message = constants.messages['3007'];
                                 res.json(response);
 
                             }
                         });
 
 
-                    }else{
+                    } else {
 
-                        response.status='error';
-                        response.error_code=2016;
-                        response.error_msg=constants.messages['2016'];
+                        response.status = 'error';
+                        response.error_code = 2016;
+                        response.error_msg = constants.messages['2016'];
                         res.json(response);
 
                     }
@@ -799,10 +830,10 @@ var listing = {
                 }
             });
 
-        }else {
-            response.status='error';
-            response.error_code=2016;
-            response.error_msg=constants.messages['2016'];
+        } else {
+            response.status = 'error';
+            response.error_code = 2016;
+            response.error_msg = constants.messages['2016'];
             res.json(response);
         }
     }
