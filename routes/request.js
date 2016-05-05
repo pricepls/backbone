@@ -201,7 +201,7 @@ var request = {
 
 
                                     logger.log("debug","repliedRequests "+"vendor_id "+parseInt(eachNVendors.vendor_id) +"requested vendor id "+vendor_id)
-                                    if(parseInt(eachNVendors.vendor_id) == vendor_id) {
+                                    if(parseInt(eachNVendors.vendor_id) == vendor_id && eachNVendors.pp_price !=undefined) {
 
                                         logger.log("debug","repliedRequests "+eachNVendors.vendor_id);
 
