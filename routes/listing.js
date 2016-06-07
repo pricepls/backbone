@@ -794,6 +794,7 @@ var listing = {
 
         var listing_id = req.body.listing_id || undefined;
         var vendor_id = req.body.vendor_id || undefined;
+        var city = req.body.city || undefined;
         var response = {
             status: ''
         }
@@ -812,7 +813,7 @@ var listing = {
                             if (err) {
                                 next(err);
                             } else {
-
+                                mysqlDB.setCityUpdatedTime(city);
                                 response.status = 'success';
                                 response.message = constants.messages['3007'];
                                 res.json(response);
