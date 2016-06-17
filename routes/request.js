@@ -80,7 +80,7 @@ var request = {
                                         request.category_id = eachNVendors.category_id;
 
                                         request.subcategory_id = eachNVendors.subtype_id;
-                                        request.unique_id = request.request_id + "##$$" + eachNVendors.listing_id;
+                                        request.unique_id = eachNVendors.unique_id;
 
                                         if (eachNVendors.best_price) {
                                             var best = eachNVendors.best_price;
@@ -213,7 +213,7 @@ var request = {
                                         request.category_id = eachNVendors.category_id;
 
                                         request.subcategory_id = eachNVendors.subtype_id;
-                                        request.unique_id = request.request_id + "##$$" + eachNVendors.listing_id;
+                                        request.unique_id = eachNVendors.unique_id;
 
                                         if (eachNVendors.best_price) {
                                             var best = eachNVendors.best_price;

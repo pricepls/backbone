@@ -9,6 +9,10 @@ shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 var configs = app.get('configs');
 var utils = require('../lib/util');
 
+var uuid = require('node-uuid');
+
+var settings = app.get("settings");
+
 mysqlDB.init();
 
 var listing = {
@@ -270,96 +274,6 @@ var listing = {
         }
 
     },
-    createListing: function (req, res, next) {
-
-        var response = {
-            status: "",
-            error_code: "",
-            error_msg: ""
-        }
-
-        var area = req.body.area;
-        var city = req.body.city;
-        var state = req.body.state;
-        var country = req.body.country;
-        var lat = req.body.lat.toString();
-        var long = req.body.long.toString();
-        var vendor_id = parseInt(req.body.vendor);
-        var category = req.body.category_id;
-        var sub_category = req.body.subtype_id;
-        var amenities = [];
-        amenities = req.body.amenities;
-        var star_rating = req.body.star_rating;
-        var vendor_obj = {};
-        var room_types = [];
-        room_types = req.body.roomtypes;
-
-        async.series([
-            function (callback) {
-
-                mysqlDB.findVendorById(vendor_id, function (err, vendor) {
-
-                    if (err) {
-                        next();
-                    } else {
-                        if (vendor !== undefined) {
-                            vendor_obj.name = vendor.name;
-                            vendor_obj.phone = vendor.phone.toString();
-                            vendor_obj.contact_no = vendor.contact_no.toString();
-                        }
-                        callback();
-                    }
-                });
-            },
-            function (callback) {
-                //TODO : image uploading need to be done here
-                callback();
-            }
-        ], function (err) {
-            if (err)
-                next(err);
-
-
-            var current_time = new Date().getTime().toString();
-
-            var listData = {
-                "listing_id": "PPL_" + shortId.generate(),
-                "area": area,
-                "city_id": city_id,
-                "city": city,
-                "state": state,
-                "country": country,
-                "latitude": lat,
-                "longitude": long,
-                "amenities": amenities,
-                "vendor_id": vendor_id,
-                "vendor_details": vendor_obj,
-                "category_id": category_id,
-                "category": category,
-                "sub_category": sub_category,
-                "star_rating": star_rating,
-                "created_at": current_time,
-                "modified_at": current_time,
-                "images": [],
-                "room_types": room_types,
-                "status": "active"
-            }
-            mongo.createListing(listData, function (err, success) {
-
-                if (err)
-                    next(err);
-                else {
-
-                    response.statusCode = 200;
-                    response.message = "success";
-                    res.json(response);
-
-                }
-            });
-        });
-
-
-    },
     newListing: function (req, res, next) {
 
         var response = {
@@ -397,8 +311,8 @@ var listing = {
             var keys = Object.keys(rooms), len = keys.length;
             for (var i = 0; i < len; i++) {
                 var each_room = {};
-                each_room.name = keys[i];
-                each_room.price = rooms[keys[i]];
+                each_room.name = keys[i].trim();
+                each_room.price = parseInt(rooms[keys[i]].trim());
                 list_rooms.push(each_room);
             }
             var amenities = req.body.amenities || undefined;
@@ -447,6 +361,9 @@ var listing = {
             /* pricing = 1 ( same for weekdays  ), 2 (diff for weekends )  */
 
             var weekpricing = req.body.weekpricing;
+
+
+
             var activity_name = req.body.activity_name;
             var inclusions = req.body.inclusions;
             query.timing_type_id = timing_type_id;
@@ -466,11 +383,22 @@ var listing = {
             var keys = Object.keys(prices), len = keys.length;
             for (var i = 0; i < len; i++) {
                 var each_price = {};
-                each_price.name = keys[i];
-                each_price.price = prices[keys[i]];
+                if(pricing !=1){
+                    each_price.name = keys[i].replace("Price","").trim();
+                }else{
+                    each_price.name = keys[i].trim()
+                }
+                each_price.price = parseInt(prices[keys[i]].trim());
                 list_prices.push(each_price);
             }
             query.prices = list_prices;
+
+            /*Pricing 1 then no need to ask for head count*/
+
+            if(pricing!="1" && (settings.head_enabled.category.indexOf(category_id)!=-1 || settings.head_enabled.sub_category.indexOf(subtype_id)!=-1)){
+                query.head_count_enabled = true;
+            }
+
         } else if (category_id == 3 || category_id == 4) {
 
             var duration = req.body.duration;
@@ -481,13 +409,17 @@ var listing = {
             var keys = Object.keys(prices), len = keys.length;
             for (var i = 0; i < len; i++) {
                 var each_price = {};
-                each_price.name = keys[i];
-                each_price.price = prices[keys[i]];
+                each_price.name = keys[i].trim();
+                each_price.price = parseInt(prices[keys[i]].trim());
                 list_prices.push(each_price);
             }
             query.inclusions = inclusions;
             query.duration = duration;
             query.prices = list_prices;
+
+            if(list_prices.length > 1 && (settings.head_enabled.category.indexOf(category_id)!=-1 || settings.head_enabled.sub_category.indexOf(subtype_id)!=-1)){
+                query.head_count_enabled = true;
+            }
 
         }
         var city_id = undefined;
@@ -500,7 +432,7 @@ var listing = {
         var state_short = undefined;
         var vendor_id = req.body.vendor || undefined;
         var current_time = new Date().getTime();
-        var listing_id = "PPL_" + shortid.generate();
+        var listing_id = uuid.v1();
         var vendor_obj = {};
         var location = req.body.location || undefined;
         var area = undefined;
