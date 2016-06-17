@@ -23,6 +23,8 @@ logger = require('winston');
 var configFile=require('./config.json');
 amenities_configs = require('./amenities.json');
 var configs;
+var settingsFile =require('./settings.json');
+var settings;
 
 // reading config based on env
 if(process.env.ENVIORNMENT =='development'){
@@ -30,11 +32,14 @@ if(process.env.ENVIORNMENT =='development'){
     logger.level = 'debug';
     //app.use(logger('short'));
     configs=configFile.development;
+    settings = settingsFile.development;
+
 
 }else{
     logger.level = 'debug';
     //app.use(logger('short'));
     configs=configFile.production;
+    settings = settingsFile.production;
 
 }
 // setting the config to make it available everywhere
@@ -46,6 +51,7 @@ logger.log('debug','configs'+JSON.stringify(configs));
 
 var constants=require('./constants.json');
 app.set('constants',constants);
+app.set("settings",settings);
 
 var port=configs.port;
 

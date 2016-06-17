@@ -25,6 +25,7 @@ var booking = {
                 user_details:1,
                 no_of_nights:1,
                 requested_date:1,
+                checkout_date:1,
                 booking_number:1,
                 subcategory:1
 
