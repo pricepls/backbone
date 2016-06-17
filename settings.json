@@ -1,0 +1,30 @@
+{
+
+  "development":{
+
+    "head_enabled":{
+      "category":[2],
+      "sub_category":[]
+    },
+    "taxes":{
+
+      "guests_per_room":2,
+      "luxury_tax":10,
+      "service_tax":7
+    }
+
+  },
+  "production":{
+
+    "head_enabled":{
+      "category":[2],
+      "sub_category":[]
+    }
+  },
+  "taxes":{
+    "guests_per_room":2,
+    "luxury_tax":10,
+    "service_tax":7
+  }
+
+}

@@ -68,7 +68,7 @@ var request = {
 
                                     logger.log("debug","getNewrequests "+"vendor_id "+parseInt(eachNVendors.vendor_id) +"requested vendor id "+vendor_id)
 
-                                    if(parseInt(eachNVendors.vendor_id) == vendor_id) {
+                                    if(parseInt(eachNVendors.vendor_id) == vendor_id && eachNVendors.status==undefined && eachNVendors.pp_price==undefined) {
 
                                         logger.log("debug","getNewrequests "+eachNVendors.vendor_id);
 
@@ -80,7 +80,7 @@ var request = {
                                         request.category_id = eachNVendors.category_id;
 
                                         request.subcategory_id = eachNVendors.subtype_id;
-                                        request.unique_id = request.request_id + "##$$" + eachNVendors.listing_id;
+                                        request.unique_id = eachNVendors.unique_id;
 
                                         if (eachNVendors.best_price) {
                                             var best = eachNVendors.best_price;
@@ -201,7 +201,7 @@ var request = {
 
 
                                     logger.log("debug","repliedRequests "+"vendor_id "+parseInt(eachNVendors.vendor_id) +"requested vendor id "+vendor_id)
-                                    if(parseInt(eachNVendors.vendor_id) == vendor_id) {
+                                    if(parseInt(eachNVendors.vendor_id) == vendor_id && eachNVendors.pp_price !=undefined) {
 
                                         logger.log("debug","repliedRequests "+eachNVendors.vendor_id);
 
@@ -213,7 +213,7 @@ var request = {
                                         request.category_id = eachNVendors.category_id;
 
                                         request.subcategory_id = eachNVendors.subtype_id;
-                                        request.unique_id = request.request_id + "##$$" + eachNVendors.listing_id;
+                                        request.unique_id = eachNVendors.unique_id;
 
                                         if (eachNVendors.best_price) {
                                             var best = eachNVendors.best_price;
@@ -356,6 +356,8 @@ var request = {
 
         }else{
 
+            logger.info("newPrice vendorID "+vendor_id +" Request ID "+request_id+" Price "+JSON.stringify(price));
+
             var current_time = new Date().getTime();
             var success_msg = constants.messages['3001'];
 
@@ -372,8 +374,12 @@ var request = {
                     var each_quote= {};
                     each_quote.room_type= keys[i];
                     each_quote.price = price[keys[i]];
-                    quoted_price.push(each_quote);
+                    if(price[keys[i]] && price[keys[i]] !="" && price[keys[i]] !=undefined)
+                        quoted_price.push(each_quote);
                 }
+
+                logger.debug("newPrice quoted price "+JSON.stringify(quoted_price));
+
                 var operator ={$set:{"notified_vendors.$.pp_price":quoted_price,"notified_vendors.$.status":"accepted","notified_vendors.$.type":type,updated_at:current_time}}
            }
 
